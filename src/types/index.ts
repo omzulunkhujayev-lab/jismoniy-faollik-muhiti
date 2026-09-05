@@ -89,6 +89,17 @@ export interface Card {
   isFavorite?: boolean;
 }
 
+export interface MediaResource {
+  id: string;
+  nomi: string;
+  turi: 'video' | 'rasm' | 'hujjat';
+  url: string;
+  haqida?: string;
+  yuklagan_shaxs: string;
+  sana: string;
+  fayl_hajmi?: string;
+}
+
 export interface CourseTopic {
   id: string;
   tartib: number;
@@ -98,6 +109,8 @@ export interface CourseTopic {
   mustaqil_soat: number;
   video_url?: string;
   taqdimot_matn: string;
+  image_urls?: string[];
+  file_attachments?: MediaResource[];
   kartochkalar_toplami: string[];
   test_savollari: {
     savol: string;
@@ -106,6 +119,8 @@ export interface CourseTopic {
   }[];
   amaliy_topshiriq: string;
   forum_mavzusi: string;
+  muallif?: string;
+  yaratilgan_sana?: string;
 }
 
 export interface Assessment {

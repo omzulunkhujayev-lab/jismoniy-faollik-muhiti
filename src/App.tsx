@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserRole, DailyEntry, WeeklyGoal, Card, ObservationCard } from './types';
+import { UserRole, DailyEntry, WeeklyGoal, Card, CourseTopic, ObservationCard } from './types';
 import { 
   mockCards, 
   initialDailyEntries, 
@@ -59,6 +59,11 @@ export const App: React.FC = () => {
     return saved ? JSON.parse(saved) : mockCards;
   });
 
+  const [topics, setTopics] = useState<CourseTopic[]>(() => {
+    const saved = localStorage.getItem('rfm_topics');
+    return saved ? JSON.parse(saved) : mockCourseTopics;
+  });
+
   const [observationCards, setObservationCards] = useState<ObservationCard[]>(() => {
     const saved = localStorage.getItem('rfm_observations');
     return saved ? JSON.parse(saved) : mockObservationCards;
@@ -89,17 +94,19 @@ export const App: React.FC = () => {
     }
   }, [darkMode]);
 
-  // Save entries to localStorage
+  // Persistence effects
   useEffect(() => {
     localStorage.setItem('rfm_entries', JSON.stringify(entries));
   }, [entries]);
 
-  // Save cards to localStorage
   useEffect(() => {
     localStorage.setItem('rfm_cards', JSON.stringify(cards));
   }, [cards]);
 
-  // Save observation cards
+  useEffect(() => {
+    localStorage.setItem('rfm_topics', JSON.stringify(topics));
+  }, [topics]);
+
   useEffect(() => {
     localStorage.setItem('rfm_observations', JSON.stringify(observationCards));
   }, [observationCards]);
@@ -132,6 +139,22 @@ export const App: React.FC = () => {
   // Handler for card favorite toggle
   const handleToggleFavorite = (cardId: string) => {
     setCards(prev => prev.map(c => c.id === cardId ? { ...c, isFavorite: !c.isFavorite } : c));
+  };
+
+  // Handlers for course topics CRUD
+  const handleSaveTopic = (savedTopic: CourseTopic) => {
+    setTopics(prev => {
+      const exists = prev.some(t => t.id === savedTopic.id);
+      if (exists) {
+        return prev.map(t => t.id === savedTopic.id ? savedTopic : t);
+      } else {
+        return [...prev, savedTopic];
+      }
+    });
+  };
+
+  const handleDeleteTopic = (topicId: string) => {
+    setTopics(prev => prev.filter(t => t.id !== topicId));
   };
 
   // Handler for adding observation card
@@ -209,7 +232,10 @@ export const App: React.FC = () => {
 
         {activeTab === 'lms' && (
           <LMSModule
-            topics={mockCourseTopics}
+            topics={topics}
+            userRole={currentRole}
+            onSaveTopic={handleSaveTopic}
+            onDeleteTopic={handleDeleteTopic}
           />
         )}
 
