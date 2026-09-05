@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { UserRole } from '../types';
+import { useLanguage } from '../context/LanguageContext';
+import { Language } from '../i18n/translations';
 import { 
   Activity, 
   Calendar, 
@@ -18,7 +20,8 @@ import {
   Menu, 
   X,
   ShieldAlert,
-  Home
+  Home,
+  Globe
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -40,52 +43,52 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleDarkMode,
   onOpenGlossary
 }) => {
+  const { lang, setLang, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Tab definitions based on role RBAC
+  // Tab definitions based on role RBAC and active language
   const getTabs = () => {
     const commonTabs = [
-      { id: 'landing', label: 'Bosh sahifa', icon: Home },
+      { id: 'landing', label: t('tabHome'), icon: Home },
     ];
 
     if (currentRole === 'talaba') {
       return [
         ...commonTabs,
-        { id: 'diary', label: 'Faollik kundaligi', icon: Calendar },
-        { id: 'weekly', label: 'Haftalik profil', icon: TrendingUp },
-        { id: 'gaps', label: 'Faollik uzilishlari', icon: Split },
-        { id: 'cards', label: 'Kartochkalar banki', icon: BookMarked },
-        { id: 'lms', label: 'O\'quv moduli (LMS)', icon: GraduationCap },
-        { id: 'diagnostics', label: 'Diagnostika', icon: ClipboardCheck },
-        { id: 'levels', label: 'Baholash va darajalar', icon: Award },
-        { id: 'gamification', label: 'Gamifikatsiya', icon: Trophy }
+        { id: 'diary', label: t('tabDiary'), icon: Calendar },
+        { id: 'weekly', label: t('tabWeekly'), icon: TrendingUp },
+        { id: 'gaps', label: t('tabGaps'), icon: Split },
+        { id: 'cards', label: t('tabCards'), icon: BookMarked },
+        { id: 'lms', label: t('tabLms'), icon: GraduationCap },
+        { id: 'diagnostics', label: t('tabDiagnostics'), icon: ClipboardCheck },
+        { id: 'levels', label: t('tabLevels'), icon: Award },
+        { id: 'gamification', label: t('tabGamification'), icon: Trophy }
       ];
     } else if (currentRole === 'oqituvchi') {
       return [
         ...commonTabs,
-        { id: 'teacher', label: 'O\'qituvchi paneli', icon: UserCheck },
-        { id: 'cards', label: 'Kartochkalar banki', icon: BookMarked },
-        { id: 'gaps', label: 'Jadval va uzilishlar', icon: Split },
-        { id: 'lms', label: 'LMS moduli', icon: GraduationCap },
-        { id: 'diagnostics', label: 'Kuzatuv kartasi', icon: ClipboardCheck }
+        { id: 'teacher', label: t('tabTeacher'), icon: UserCheck },
+        { id: 'cards', label: t('tabCards'), icon: BookMarked },
+        { id: 'gaps', label: t('tabGaps'), icon: Split },
+        { id: 'lms', label: t('tabLms'), icon: GraduationCap },
+        { id: 'diagnostics', label: t('tabDiagnostics'), icon: ClipboardCheck }
       ];
     } else if (currentRole === 'tyutor') {
       return [
         ...commonTabs,
-        { id: 'tutor', label: 'Tyutor hisoboti', icon: BarChart3 },
-        { id: 'gaps', label: 'Guruh uzilishlari', icon: Split },
-        { id: 'levels', label: 'Talabalar darajasi', icon: Award },
-        { id: 'diagnostics', label: 'Diagnostika', icon: ClipboardCheck }
+        { id: 'tutor', label: t('tabTutor'), icon: BarChart3 },
+        { id: 'gaps', label: t('tabGaps'), icon: Split },
+        { id: 'levels', label: t('tabLevels'), icon: Award },
+        { id: 'diagnostics', label: t('tabDiagnostics'), icon: ClipboardCheck }
       ];
     } else {
-      // kafedra / admin
       return [
         ...commonTabs,
-        { id: 'department', label: 'Kafedra statistikasi', icon: BarChart3 },
-        { id: 'cards', label: 'Kartochkalar boshqaruvi', icon: BookMarked },
-        { id: 'lms', label: 'LMS kontent', icon: GraduationCap },
-        { id: 'diagnostics', label: 'Ekspert baholash', icon: ClipboardCheck },
-        { id: 'levels', label: 'Integral baholash', icon: Award }
+        { id: 'department', label: t('tabDepartment'), icon: BarChart3 },
+        { id: 'cards', label: t('tabCards'), icon: BookMarked },
+        { id: 'lms', label: t('tabLms'), icon: GraduationCap },
+        { id: 'diagnostics', label: t('tabDiagnostics'), icon: ClipboardCheck },
+        { id: 'levels', label: t('tabLevels'), icon: Award }
       ];
     }
   };
@@ -104,16 +107,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div>
               <span className="font-extrabold text-lg text-gray-900 dark:text-white tracking-tight flex items-center gap-1.5">
-                Raqamli Faollik Muhiti
+                {t('appName')}
               </span>
               <span className="text-[10px] uppercase font-semibold tracking-wider text-emerald-600 dark:text-emerald-400 block -mt-1">
-                Pedagogik Platforma
+                {t('appSubtitle')}
               </span>
             </div>
           </div>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 overflow-x-auto max-w-2xl py-1">
+          <nav className="hidden lg:flex items-center gap-1 overflow-x-auto max-w-xl py-1">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
@@ -134,24 +137,38 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Actions & Role Switcher */}
+          {/* Actions & Role / Language Switcher */}
           <div className="hidden sm:flex items-center gap-2">
             
+            {/* Language Selector */}
+            <div className="relative flex items-center bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded-xl border border-gray-200 dark:border-slate-700">
+              <Globe className="w-3.5 h-3.5 text-emerald-500 mr-1" />
+              <select
+                value={lang}
+                onChange={(e) => setLang(e.target.value as Language)}
+                className="bg-transparent text-xs font-bold text-gray-800 dark:text-gray-200 outline-none cursor-pointer"
+              >
+                <option value="uz">🇺🇿 O'zb</option>
+                <option value="ru">🇷🇺 Рус</option>
+                <option value="en">🇬🇧 Eng</option>
+              </select>
+            </div>
+
             {/* Glossary Button */}
             <button
               onClick={onOpenGlossary}
               className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-slate-700 hover:text-emerald-600 transition"
-              title="Pedagogik Glossariy"
+              title={t('glossary')}
             >
               <BookOpen className="w-4 h-4 text-emerald-500" />
-              <span>Glossariy</span>
+              <span>{t('glossary')}</span>
             </button>
 
             {/* Dark Mode Toggle */}
             <button
               onClick={onToggleDarkMode}
               className="p-2 rounded-lg text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-800 transition"
-              title="Mavzuni o'zgartirish"
+              title="Theme"
             >
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
             </button>
@@ -164,10 +181,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onChange={(e) => onRoleChange(e.target.value as UserRole)}
                 className="bg-transparent text-xs font-bold text-gray-800 dark:text-gray-200 outline-none cursor-pointer pr-1"
               >
-                <option value="talaba">Rol: Talaba</option>
-                <option value="oqituvchi">Rol: O'qituvchi</option>
-                <option value="tyutor">Rol: Tyutor</option>
-                <option value="kafedra">Rol: Kafedra (Admin)</option>
+                <option value="talaba">{t('roleLabel')}: {t('roleStudent')}</option>
+                <option value="oqituvchi">{t('roleLabel')}: {t('roleTeacher')}</option>
+                <option value="tyutor">{t('roleLabel')}: {t('roleTutor')}</option>
+                <option value="kafedra">{t('roleLabel')}: {t('roleAdmin')}</option>
               </select>
             </div>
           </div>
@@ -196,7 +213,24 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="lg:hidden border-t border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 pt-2 pb-4 space-y-3">
           
           <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-800">
-            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">Rolni tanlang (Demo):</span>
+            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">Til / Language:</span>
+            <div className="flex gap-1">
+              {(['uz', 'ru', 'en'] as Language[]).map((l) => (
+                <button
+                  key={l}
+                  onClick={() => setLang(l)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold uppercase ${
+                    lang === l ? 'bg-emerald-600 text-white' : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-300'
+                  }`}
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-slate-800">
+            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">Rolni tanlang:</span>
             <select
               value={currentRole}
               onChange={(e) => {
@@ -205,10 +239,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="bg-gray-100 dark:bg-slate-800 text-xs font-bold text-gray-800 dark:text-gray-200 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700"
             >
-              <option value="talaba">Talaba</option>
-              <option value="oqituvchi">Fan O'qituvchisi</option>
-              <option value="tyutor">Tyutor</option>
-              <option value="kafedra">Kafedra / Admin</option>
+              <option value="talaba">{t('roleStudent')}</option>
+              <option value="oqituvchi">{t('roleTeacher')}</option>
+              <option value="tyutor">{t('roleTutor')}</option>
+              <option value="kafedra">{t('roleAdmin')}</option>
             </select>
           </div>
 
@@ -220,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="w-full flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-medium bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300"
             >
-              <BookOpen className="w-4 h-4" /> Glossariy
+              <BookOpen className="w-4 h-4" /> {t('glossary')}
             </button>
           </div>
 

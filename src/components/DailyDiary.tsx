@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DailyEntry } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   Footprints, 
   Clock, 
@@ -21,6 +22,7 @@ interface DailyDiaryProps {
 }
 
 export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) => {
+  const { t } = useLanguage();
   const todayStr = new Date().toISOString().split('T')[0];
 
   const [sana, setSana] = useState(todayStr);
@@ -71,11 +73,11 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
       <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-bold mb-2">
-            <Sparkles className="w-3.5 h-3.5" /> Tezkor to'ldirish (1 daqiqadan kam)
+            <Sparkles className="w-3.5 h-3.5" /> {t('quickEntry')}
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold">Kunlik Faollik Kundaligi</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold">{t('diaryTitle')}</h1>
           <p className="text-emerald-100 text-xs sm:text-sm mt-1">
-            Bugungi jismoniy faollik, uzluksiz o'tirish va tiklanish ko'rsatkichlaringizni qayd eting.
+            {t('diaryDesc')}
           </p>
         </div>
         <div className="bg-white/10 backdrop-blur-md p-3 rounded-2xl border border-white/20 text-right shrink-0">
@@ -106,10 +108,10 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <Footprints className="w-4 h-4 text-emerald-500" /> Kunlik qadamlar soni
+                <Footprints className="w-4 h-4 text-emerald-500" /> {t('fieldSteps')}
               </span>
               <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${qadam >= 8000 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'}`}>
-                {qadam.toLocaleString()} qadam
+                {qadam.toLocaleString()}
               </span>
             </div>
             <input
@@ -121,18 +123,13 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               onChange={(e) => setQadam(Number(e.target.value))}
               className="w-full accent-emerald-600 cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-              <span>1 000</span>
-              <span className="text-emerald-600 font-bold">Me'yor: 8 000+</span>
-              <span>20 000</span>
-            </div>
           </div>
 
           {/* 2. Faol daqiqalar */}
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <Clock className="w-4 h-4 text-teal-500" /> Faol daqiqalar (o'rtacha jadallik)
+                <Clock className="w-4 h-4 text-teal-500" /> {t('fieldActiveMins')}
               </span>
               <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300">
                 {faolDaqiqa} daqiqa
@@ -147,18 +144,13 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               onChange={(e) => setFaolDaqiqa(Number(e.target.value))}
               className="w-full accent-teal-600 cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-              <span>0 daq</span>
-              <span className="text-teal-600 font-bold">Tavsiya: ~30 daq/kun</span>
-              <span>120 daq</span>
-            </div>
           </div>
 
           {/* 3. Eng uzun uzluksiz o'tirish */}
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <AlertTriangle className={`w-4 h-4 ${engUzunOtirish > 60 ? 'text-rose-500' : 'text-emerald-500'}`} /> Eng uzun uzluksiz o'tirish
+                <AlertTriangle className={`w-4 h-4 ${engUzunOtirish > 60 ? 'text-rose-500' : 'text-emerald-500'}`} /> {t('fieldMaxSitting')}
               </span>
               <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${engUzunOtirish < 60 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'}`}>
                 {engUzunOtirish} daqiqa
@@ -173,22 +165,14 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               onChange={(e) => setEngUzunOtirish(Number(e.target.value))}
               className="w-full accent-rose-500 cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] font-medium">
-              <span className="text-gray-400">15 daq</span>
-              <span className={engUzunOtirish > 60 ? 'text-rose-500 font-bold' : 'text-emerald-600 font-bold'}>
-                {engUzunOtirish > 60 ? '⚠️ Uzilish xavfi (>60 daq!)' : '✓ Xavfsiz me\'yor (<60 daq)'}
-              </span>
-              <span className="text-gray-400">180 daq</span>
-            </div>
           </div>
 
-          {/* 4. Mikrofaollik pauzalari soni (+/- counter) */}
+          {/* 4. Mikrofaollik pauzalari soni */}
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between">
             <div>
               <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-amber-500" /> Mikrofaollik pauzalari
+                <Zap className="w-4 h-4 text-amber-500" /> {t('fieldPauses')}
               </span>
-              <p className="text-[11px] text-gray-500 dark:text-gray-400">Har 45-60 daqiqada 1 pauza</p>
             </div>
 
             <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-gray-200 dark:border-slate-700">
@@ -218,7 +202,7 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <Moon className="w-4 h-4 text-indigo-500" /> Uyqu davomiyligi
+                <Moon className="w-4 h-4 text-indigo-500" /> {t('fieldSleep')}
               </span>
               <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
                 {uyquSoat} soat
@@ -233,18 +217,13 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               onChange={(e) => setUyquSoat(Number(e.target.value))}
               className="w-full accent-indigo-600 cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-              <span>4 soat</span>
-              <span className="text-indigo-600 font-bold">Me'yor: 7–9 soat</span>
-              <span>12 soat</span>
-            </div>
           </div>
 
           {/* 6. Ekran vaqti */}
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
               <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-purple-500" /> Kunlik ekran vaqti
+                <Smartphone className="w-4 h-4 text-purple-500" /> {t('fieldScreen')}
               </span>
               <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300">
                 {ekranSoat} soat
@@ -259,19 +238,14 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               onChange={(e) => setEkranSoat(Number(e.target.value))}
               className="w-full accent-purple-600 cursor-pointer"
             />
-            <div className="flex justify-between text-[10px] text-gray-400 font-medium">
-              <span>1 soat</span>
-              <span>6 soat</span>
-              <span>12 soat</span>
-            </div>
           </div>
 
         </div>
 
-        {/* 7. Kayfiyat va Ish qobiliyati (Emoji rating) */}
+        {/* 7. Kayfiyat */}
         <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
           <label className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
-            <Smile className="w-4 h-4 text-amber-500" /> Kayfiyat va ish qobiliyati (5 ballik shkala)
+            <Smile className="w-4 h-4 text-amber-500" /> {t('fieldMood')}
           </label>
           
           <div className="grid grid-cols-5 gap-2 sm:gap-4">
@@ -291,23 +265,22 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
                 >
                   <span className="text-2xl">{emoji.char}</span>
                   <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300">{score}-ball</span>
-                  <span className="text-[9px] text-gray-400 hidden sm:inline">{emoji.label}</span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* 8. Refleksiya matni (Optional 1-2 sentences) */}
+        {/* 8. Refleksiya */}
         <div className="space-y-2">
           <label className="font-bold text-sm text-gray-800 dark:text-gray-200">
-            Kunlik refleksiya (1–2 jumla, ixtiyoriy)
+            {t('fieldReflection')}
           </label>
           <textarea
             rows={2}
             value={refleksiyaMatn}
             onChange={(e) => setRefleksiyaMatn(e.target.value)}
-            placeholder="Bugungi faollik holatingiz haqida qisqa fikr (masalan: darslar orasida ko'proq piyoda yurdim, belda yengillik bor)..."
+            placeholder="..."
             className="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 transition"
           />
         </div>
@@ -319,48 +292,11 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
             className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2"
           >
             <Save className="w-5 h-5" />
-            <span>Kundalikka saqlash (Yopiq halqaga kiritish)</span>
+            <span>{t('btnSaveDiary')}</span>
           </button>
         </div>
 
       </form>
-
-      {/* History Log */}
-      <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-slate-700 space-y-4">
-        <h3 className="font-bold text-lg text-gray-900 dark:text-white">Oxirgi kiritilgan yozuvlar tarixi</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-gray-200 dark:border-slate-700 text-xs uppercase text-gray-400 font-bold">
-                <th className="py-3 px-3">Sana</th>
-                <th className="py-3 px-3">Qadam</th>
-                <th className="py-3 px-3">Faol daq</th>
-                <th className="py-3 px-3">Uzlik. o'tirish</th>
-                <th className="py-3 px-3">Pauzalar</th>
-                <th className="py-3 px-3">Uyqu</th>
-                <th className="py-3 px-3">Kayfiyat</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-slate-800 text-xs font-medium">
-              {entries.map((entry) => (
-                <tr key={entry.id} className="hover:bg-slate-50 dark:hover:bg-slate-900/40">
-                  <td className="py-3 px-3 font-bold text-gray-800 dark:text-gray-200">{entry.sana}</td>
-                  <td className="py-3 px-3 font-semibold text-emerald-600 dark:text-emerald-400">
-                    {entry.qadam.toLocaleString()}
-                  </td>
-                  <td className="py-3 px-3">{entry.faol_daqiqa} daq</td>
-                  <td className={`py-3 px-3 font-bold ${entry.eng_uzun_otirish > 60 ? 'text-rose-500' : 'text-emerald-600'}`}>
-                    {entry.eng_uzun_otirish} daq
-                  </td>
-                  <td className="py-3 px-3">{entry.pauza_soni} ta</td>
-                  <td className="py-3 px-3">{entry.uyqu_soat} soat</td>
-                  <td className="py-3 px-3 font-bold text-amber-500">{getEmoji(entry.kayfiyat_ball).char} {entry.kayfiyat_ball}/5</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
 
     </div>
   );
