@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CourseTopic, MediaResource } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   X, 
   Upload, 
@@ -31,6 +32,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
   onDeleteTopic,
   userRole
 }) => {
+  const { t, lang } = useLanguage();
   if (!isOpen) return null;
 
   const isEditing = !!topicToEdit;
@@ -170,10 +172,13 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
             </div>
             <div>
               <span className="text-xs uppercase font-extrabold text-emerald-600 dark:text-emerald-400">
-                {userRole === 'kafedra' ? 'Kafedra / Admin Boshqaruvi' : 'O\'qituvchi Paneli'}
+                {userRole === 'kafedra' ? (lang === 'ru' ? 'Управление кафедры' : lang === 'en' ? 'Department Admin' : 'Kafedra / Admin Boshqaruvi') : (lang === 'ru' ? 'Панель преподавателя' : lang === 'en' ? 'Teacher Panel' : 'O\'qituvchi Paneli')}
               </span>
               <h2 className="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white">
-                {isEditing ? "Ma'ruza & Media Materialni Tahrirlash" : "Yangi Ma'ruza va Media Material Yuklash"}
+                {isEditing 
+                  ? (lang === 'ru' ? 'Редактировать лекцию и медиа' : lang === 'en' ? 'Edit Lecture & Media' : 'Ma\'ruza & Media Materialni Tahrirlash') 
+                  : (lang === 'ru' ? 'Загрузить новую лекцию и медиа' : lang === 'en' ? 'Upload New Lecture & Media' : 'Yangi Ma\'ruza va Media Material Yuklash')
+                }
               </h2>
             </div>
           </div>
@@ -191,14 +196,14 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
           {/* Topic title */}
           <div>
             <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block mb-1">
-              Mavzu nomi:
+              {lang === 'ru' ? 'Название темы:' : lang === 'en' ? 'Topic Title:' : 'Mavzu nomi:'}
             </label>
             <input
               type="text"
               required
               value={nomi}
               onChange={(e) => setNomi(e.target.value)}
-              placeholder="Masalan: Jismoniy faollik va o'tirg'ich xulq-atvorni baholash metodlari"
+              placeholder={lang === 'ru' ? 'Например: Методы оценки активности...' : lang === 'en' ? 'Example: Physical activity assessment methods...' : 'Masalan: Jismoniy faollik va o\'tirg\'ich xulq-atvorni baholash metodlari'}
               className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-bold outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
@@ -206,7 +211,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
           {/* Hours distribution */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="text-[11px] font-bold text-gray-700 dark:text-gray-300 block mb-1">Ma'ruza soati:</label>
+              <label className="text-[11px] font-bold text-gray-700 dark:text-gray-300 block mb-1">{lang === 'ru' ? 'Лекция (часы):' : lang === 'en' ? 'Lecture (hours):' : 'Ma\'ruza soati:'}</label>
               <input
                 type="number"
                 min="0"
@@ -217,7 +222,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-gray-700 dark:text-gray-300 block mb-1">Amaliy soat:</label>
+              <label className="text-[11px] font-bold text-gray-700 dark:text-gray-300 block mb-1">{lang === 'ru' ? 'Практика (часы):' : lang === 'en' ? 'Practical (hours):' : 'Amaliy soat:'}</label>
               <input
                 type="number"
                 min="0"
@@ -228,7 +233,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-[11px] font-bold text-gray-700 dark:text-gray-300 block mb-1">Mustaqil soat:</label>
+              <label className="text-[11px] font-bold text-gray-700 dark:text-gray-300 block mb-1">{lang === 'ru' ? 'Самост. (часы):' : lang === 'en' ? 'Self-study (h):' : 'Mustaqil soat:'}</label>
               <input
                 type="number"
                 min="0"
@@ -243,7 +248,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
           {/* Video Lecture URL */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
-              <Video className="w-4 h-4 text-emerald-500" /> Video-ma'ruza havolasi (YouTube / MP4 Embed URL):
+              <Video className="w-4 h-4 text-emerald-500" /> {lang === 'ru' ? 'Ссылка на видео-лекцию (YouTube / MP4 Embed URL):' : lang === 'en' ? 'Video Lecture URL (YouTube / MP4 Embed):' : 'Video-ma\'ruza havolasi (YouTube / MP4 Embed URL):'}
             </label>
             <input
               type="text"
@@ -257,13 +262,13 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
           {/* Presentation text */}
           <div className="space-y-1">
             <label className="text-xs font-bold text-gray-800 dark:text-gray-200 flex items-center gap-1.5">
-              <FileText className="w-4 h-4 text-blue-500" /> Taqdimot ma'ruzasi va didaktik tezislar:
+              <FileText className="w-4 h-4 text-blue-500" /> {lang === 'ru' ? 'Текст презентации и тезисы:' : lang === 'en' ? 'Presentation text & key thesis:' : 'Taqdimot ma\'ruzasi va didaktik tezislar:'}
             </label>
             <textarea
               rows={4}
               value={taqdimotMatn}
               onChange={(e) => setTaqdimotMatn(e.target.value)}
-              placeholder="Ma'ruza matni va asosiy ilmiy tezislarni kiriting..."
+              placeholder={lang === 'ru' ? 'Введите текст лекции...' : lang === 'en' ? 'Enter lecture text and thesis...' : 'Ma\'ruza matni va asosiy ilmiy tezislarni kiriting...'}
               className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs outline-none focus:ring-2 focus:ring-emerald-500 leading-relaxed"
             />
           </div>
@@ -272,12 +277,12 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
           <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700 space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="font-bold text-xs uppercase text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-amber-500" /> Rasmlar va Fayllar Kutubxonasi (Media Upload)
+                <ImageIcon className="w-4 h-4 text-amber-500" /> {lang === 'ru' ? 'Библиотека фото и файлов (Media Upload)' : lang === 'en' ? 'Pictures & Files Library (Media Upload)' : 'Rasmlar va Fayllar Kutubxonasi (Media Upload)'}
               </h3>
               
               <label className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs cursor-pointer transition flex items-center gap-1">
                 <Upload className="w-3.5 h-3.5" />
-                <span>Kompyuterdan yuklash</span>
+                <span>{lang === 'ru' ? 'Загрузить с ПК' : lang === 'en' ? 'Upload from PC' : 'Kompyuterdan yuklash'}</span>
                 <input
                   type="file"
                   accept="image/*,video/*,.pdf,.pptx"
@@ -295,14 +300,13 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
                     {f.turi === 'video' ? <Video className="w-4 h-4 text-emerald-500" /> : f.turi === 'rasm' ? <ImageIcon className="w-4 h-4 text-amber-500" /> : <FileText className="w-4 h-4 text-blue-500" />}
                     <div>
                       <div className="font-bold text-gray-900 dark:text-white">{f.nomi}</div>
-                      <div className="text-[10px] text-gray-400">Yukladi: {f.yuklagan_shaxs} | {f.sana} {f.fayl_hajmi ? `(${f.fayl_hajmi})` : ''}</div>
+                      <div className="text-[10px] text-gray-400">{lang === 'ru' ? 'Загрузил:' : lang === 'en' ? 'Uploaded by:' : 'Yukladi:'} {f.yuklagan_shaxs} | {f.sana} {f.fayl_hajmi ? `(${f.fayl_hajmi})` : ''}</div>
                     </div>
                   </div>
                   <button
                     type="button"
                     onClick={() => handleRemoveFileAttachment(f.id)}
                     className="p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/50"
-                    title="Faylni o'chirish"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -314,7 +318,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
             <div className="flex gap-2 pt-2">
               <input
                 type="text"
-                placeholder="External fayl / rasm nomi..."
+                placeholder={lang === 'ru' ? 'Название внешнего файла/картинки...' : lang === 'en' ? 'External file / picture title...' : 'External fayl / rasm nomi...'}
                 value={newFileTitle}
                 onChange={(e) => setNewFileTitle(e.target.value)}
                 className="flex-1 p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs"
@@ -324,16 +328,16 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
                 onChange={(e) => setNewFileType(e.target.value as any)}
                 className="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold"
               >
-                <option value="rasm">Rasm</option>
+                <option value="rasm">{lang === 'ru' ? 'Картинка' : lang === 'en' ? 'Picture' : 'Rasm'}</option>
                 <option value="video">Video</option>
-                <option value="hujjat">Taqdimot / Hujjat</option>
+                <option value="hujjat">{lang === 'ru' ? 'Презентация/Документ' : lang === 'en' ? 'Presentation/Doc' : 'Taqdimot / Hujjat'}</option>
               </select>
               <button
                 type="button"
                 onClick={handleAddFileAttachment}
                 className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs"
               >
-                Qo'shish
+                {lang === 'ru' ? 'Добавить' : lang === 'en' ? 'Add' : 'Qo\'shish'}
               </button>
             </div>
 
@@ -342,7 +346,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
           {/* Practical Assignment & Forum */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block mb-1">Amaliy topshiriq sharti:</label>
+              <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block mb-1">{lang === 'ru' ? 'Практическое задание:' : lang === 'en' ? 'Practical Task:' : 'Amaliy topshiriq sharti:'}</label>
               <textarea
                 rows={2}
                 value={amaliyTopshiriq}
@@ -351,7 +355,7 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
               />
             </div>
             <div>
-              <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block mb-1">Forum muhokama mavzusi:</label>
+              <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block mb-1">{lang === 'ru' ? 'Тема для обсуждения на форуме:' : lang === 'en' ? 'Forum Discussion Topic:' : 'Forum muhokama mavzusi:'}</label>
               <textarea
                 rows={2}
                 value={forumMavzusi}
@@ -367,14 +371,14 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  if (confirm("Ushbu ma'ruza va barcha unga tegishli fayllarni o'chirishga ishonchingiz komilmi?")) {
+                  if (confirm(lang === 'ru' ? 'Вы уверены, что хотите удалить эту лекцию?' : lang === 'en' ? 'Are you sure you want to delete this lecture?' : "Ushbu ma'ruza va barcha unga tegishli fayllarni o'chirishga ishonchingiz komilmi?")) {
                     onDeleteTopic(topicToEdit.id);
                     onClose();
                   }
                 }}
                 className="px-4 py-2.5 rounded-xl bg-rose-100 hover:bg-rose-200 text-rose-700 text-xs font-bold flex items-center gap-1.5 transition"
               >
-                <Trash2 className="w-4 h-4" /> Ma'ruzani o'chirish
+                <Trash2 className="w-4 h-4" /> {t('btnDelete')}
               </button>
             )}
 
@@ -384,13 +388,13 @@ export const ContentManagementModal: React.FC<ContentManagementModalProps> = ({
                 onClick={onClose}
                 className="px-5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 text-xs font-bold"
               >
-                Bekor qilish
+                {t('btnCancel')}
               </button>
               <button
                 type="submit"
                 className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-1.5"
               >
-                <CheckCircle2 className="w-4 h-4" /> Saqlash va e'lon qilish
+                <CheckCircle2 className="w-4 h-4" /> {t('btnSave')}
               </button>
             </div>
           </div>

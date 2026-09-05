@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserRole, DailyEntry, WeeklyGoal, Card, CourseTopic, ObservationCard } from './types';
+import { useLanguage } from './context/LanguageContext';
 import { 
   mockCards, 
   initialDailyEntries, 
@@ -29,6 +30,7 @@ import { TutorDepartmentDashboard } from './components/TutorDepartmentDashboard'
 import { Wifi, WifiOff } from 'lucide-react';
 
 export const App: React.FC = () => {
+  const { t, lang } = useLanguage();
   // Dark mode state with localStorage persistence
   const [darkMode, setDarkMode] = useState<boolean>(() => {
     return localStorage.getItem('rfm_theme') === 'dark';
@@ -281,10 +283,10 @@ export const App: React.FC = () => {
       <footer className="border-t border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 mt-12 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
           <div>
-            © 2026 <strong>Raqamli Faollik Muhiti</strong>. Ilmiy-pedagogik raqamli platforma.
+            © 2026 <strong>{t('appName')}</strong>. {t('appSubtitle')}.
           </div>
           <div className="flex items-center gap-4">
-            <button onClick={() => setGlossaryOpen(true)} className="hover:underline">Glossariy</button>
+            <button onClick={() => setGlossaryOpen(true)} className="hover:underline">{t('glossary')}</button>
             <span>|</span>
             <span className="flex items-center gap-1 font-semibold">
               {isOnline ? (
@@ -293,7 +295,7 @@ export const App: React.FC = () => {
                 </span>
               ) : (
                 <span className="text-amber-500 flex items-center gap-1">
-                  <WifiOff className="w-3.5 h-3.5" /> PWA Offline (Avtonom kiritish)
+                  <WifiOff className="w-3.5 h-3.5" /> {lang === 'ru' ? 'PWA Офлайн (Автономный ввод)' : lang === 'en' ? 'PWA Offline (Autonomous input)' : 'PWA Offline (Avtonom kiritish)'}
                 </span>
               )}
             </span>

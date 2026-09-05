@@ -22,7 +22,7 @@ interface DailyDiaryProps {
 }
 
 export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const todayStr = new Date().toISOString().split('T')[0];
 
   const [sana, setSana] = useState(todayStr);
@@ -94,7 +94,14 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
       {savedSuccess && (
         <div className="p-4 rounded-2xl bg-emerald-500 text-white font-medium text-sm flex items-center gap-3 shadow-lg animate-in fade-in duration-300">
           <CheckCircle2 className="w-6 h-6 shrink-0" />
-          <span>Kunlik ko'rsatkichlar muvaffaqiyatli saqlandi! Yopiq halqaning keyingi bo'g'iniga o'tildi.</span>
+          <span>
+            {lang === 'ru' 
+              ? "Показатели успешно сохранены! Переход к следующему звену замкнутого цикла."
+              : lang === 'en'
+              ? "Daily metrics saved successfully! Moved to the next link of the closed loop."
+              : "Kunlik ko'rsatkichlar muvaffaqiyatli saqlandi! Yopiq halqaning keyingi bo'g'iniga o'tildi."
+            }
+          </span>
         </div>
       )}
 

@@ -155,7 +155,7 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
       {/* Levels Qualitative Descriptions */}
       <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-gray-100 dark:border-slate-700 shadow-xl space-y-6">
         <h3 className="font-extrabold text-lg text-gray-900 dark:text-white">
-          Darajalar bo'yicha sifat tavsiflari
+          {lang === 'ru' ? 'Качественные характеристики уровней' : lang === 'en' ? 'Qualitative Descriptions of Levels' : 'Darajalar bo\'yicha sifat tavsiflari'}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -163,30 +163,45 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
           {/* High */}
           <div className="p-5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 space-y-2">
             <span className="font-extrabold text-emerald-800 dark:text-emerald-300 text-sm block">
-              Yuqori daraja (86–100 ball)
+              {t('levelHigh')} (86–100)
             </span>
             <p className="text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed">
-              Talaba harakat faolligi me'yorlarini to'liq anglaydi, kundalik monitoringni uzluksiz yuritadi. O'quv darslarida va mustaqil ta'limda mikrofaollik pauzalarini mustaqil va didaktik o'rinli tashkil qila oladi. Refleksiv tahlil chuqur.
+              {lang === 'ru' 
+                ? 'Студент полностью осознает нормы двигательной активности, непрерывно ведет ежедневный мониторинг. Способен самостоятельно и дидактически оправданно проводить микропаузы на занятиях. Глубокий рефлексивный анализ.'
+                : lang === 'en' 
+                ? 'The student fully understands physical activity norms and maintains daily monitoring continuously. Capable of independently and didactically conducting microactivity pauses in classes. Deep reflective analysis.'
+                : 'Talaba harakat faolligi me\'yorlarini to\'liq anglaydi, kundalik monitoringni uzluksiz yuritadi. O\'quv darslarida va mustaqil ta\'limda mikrofaollik pauzalarini mustaqil va didaktik o\'rinli tashkil qila oladi. Refleksiv tahlil chuqur.'
+              }
             </p>
           </div>
 
           {/* Medium */}
           <div className="p-5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 space-y-2">
             <span className="font-extrabold text-amber-800 dark:text-amber-300 text-sm block">
-              O'rta daraja (71–85 ball)
+              {t('levelMedium')} (71–85)
             </span>
             <p className="text-xs text-amber-900 dark:text-amber-200 leading-relaxed">
-              Talaba me'yorlar va metodikani biladi, lekin monitoring yuritishda ba'zan uzilishlarga yo'l qo'yadi. Pauzalarni asosan o'qituvchi eslatgandagina bajaradi. Maqsad qo'yish ko'nikmasi shakllanmoqda.
+              {lang === 'ru' 
+                ? 'Студент знает нормы и методику, но иногда допускает перерывы в мониторинге. Проводит паузы в основном по напоминанию преподавателя. Навык постановки целей формируется.'
+                : lang === 'en' 
+                ? 'The student knows norms and methods but occasionally has gaps in monitoring. Conducts pauses mostly when reminded by the teacher. Goal-setting skill is developing.'
+                : 'Talaba me\'yorlar va metodikani biladi, lekin monitoring yuritishda ba\'zan uzilishlarga yo\'l qo\'yadi. Pauzalarni asosan o\'qituvchi eslatgandagina bajaradi. Maqsad qo\'yish ko\'nikmasi shakllanmoqda.'
+              }
             </p>
           </div>
 
           {/* Low */}
           <div className="p-5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 space-y-2">
             <span className="font-extrabold text-rose-800 dark:text-rose-300 text-sm block">
-              Quyi daraja (70 va undan past)
+              {t('levelLow')} (≤70)
             </span>
             <p className="text-xs text-rose-900 dark:text-rose-200 leading-relaxed">
-              O'tirg'ich xulq-atvor xavflarini yetarli anglamaydi. Monitoring tartibsiz, uzluksiz o'tirish vaqti tez-tez 60 daqiqadan oshadi. Tyutor bilan individual suhbat va korreksion yordam talab etiladi.
+              {lang === 'ru' 
+                ? 'Недостаточно осознает риски сидячего поведения. Мониторинг нерегулярен, непрерывное сидение часто превышает 60 минут. Требуется индивидуальная беседа с тьютором и коррекционная помощь.'
+                : lang === 'en' 
+                ? 'Does not sufficiently understand sedentary behavior risks. Irregular monitoring, continuous sitting frequently exceeds 60 mins. Requires individual talk with tutor and corrective support.'
+                : 'O\'tirg\'ich xulq-atvor xavflarini yetarli anglamaydi. Monitoring tartibsiz, uzluksiz o\'tirish vaqti tez-tez 60 daqiqadan oshadi. Tyutor bilan individual suhbat va korreksion yordam talab etiladi.'
+              }
             </p>
           </div>
 
@@ -201,22 +216,38 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
               <Activity className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl font-bold">Triangulyatsiya Mexanizmi va Tyutor Signali</h2>
-              <p className="text-xs text-slate-400">Talaba yozuvlari + Qurilma ma'lumoti + Kuzatuv/Ekspert bahosi taqqoslamasi</p>
+              <h2 className="text-xl font-bold">
+                {lang === 'ru' ? 'Механизм Триангуляции и Сигнал Тьютора' : lang === 'en' ? 'Triangulation Mechanism & Tutor Signal' : 'Triangulyatsiya Mexanizmi va Tyutor Signali'}
+              </h2>
+              <p className="text-xs text-slate-400">
+                {lang === 'ru' ? 'Записи студента + Данные устройства + Сравнение оценки наблюдения' : lang === 'en' ? 'Student log + Device data + Observation/Expert evaluation comparison' : 'Talaba yozuvlari + Qurilma ma\'lumoti + Kuzatuv/Ekspert bahosi taqqoslamasi'}
+              </p>
             </div>
           </div>
           <span className="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-400 font-bold border border-emerald-500/30">
-            3 Tomonlama Solishtirish
+            {lang === 'ru' ? '3-стороннее сравнение' : lang === 'en' ? '3-Way Comparison' : '3 Tomonlama Solishtirish'}
           </span>
         </div>
 
         <div className="p-4 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs leading-relaxed space-y-2">
           <p className="text-slate-300">
-            Tizim avtomatik ravishda 3 manba ma'lumotlarini taqqoslaydi. Nomuvofiqlik aniqlansa (masalan: talaba qo'lda 15,000 qadam deb kiritsa, lekin fit-treker 3,500 qadam ko'rsatsa), tizim <strong>tyutorga belgi (flag) beradi</strong>.
+            {lang === 'ru'
+              ? 'Система автоматически сравнивает данные из 3 источников. При выявлении расхождений (например: 15 000 шагов вручную vs 3 500 на трекере), система выдает флаг тьютору.'
+              : lang === 'en'
+              ? 'The system automatically compares data from 3 sources. If a discrepancy is detected (e.g. manual 15,000 steps vs 3,500 tracker steps), the system flags it for the tutor.'
+              : 'Tizim avtomatik ravishda 3 manba ma\'lumotlarini taqqoslaydi. Nomuvofiqlik aniqlansa (masalan: talaba qo\'lda 15,000 qadam deb kiritsa, lekin fit-treker 3,500 qadam ko\'rsatsa), tizim tyutorga belgi (flag) beradi.'
+            }
           </p>
           <div className="p-3 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-200 font-semibold flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-            <span>Muhim: Bu jazolash vositasi emas, balki tyutor bilan samimiy muhokama va rag'batlantiruvchi suhbat uchun signaldir.</span>
+            <span>
+              {lang === 'ru'
+                ? 'Важно: Это не средство наказания, а сигнал для доверительной беседы и поддержки со стороны тьютора.'
+                : lang === 'en'
+                ? 'Important: This is not a punishment tool, but a signal for a constructive, supportive talk with the tutor.'
+                : 'Muhim: Bu jazolash vositasi emas, balki tyutor bilan samimiy muhokama va rag\'batlantiruvchi suhbat uchun signaldir.'
+              }
+            </span>
           </div>
         </div>
       </div>
