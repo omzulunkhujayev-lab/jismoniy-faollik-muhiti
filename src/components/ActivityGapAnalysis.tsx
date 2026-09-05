@@ -19,13 +19,19 @@ interface ActivityGapAnalysisProps {
 }
 
 export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedule, gaps }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [selectedDay, setSelectedDay] = useState<'Dushanba' | 'Seshanba'>('Dushanba');
   const [showBeforeAfter, setShowBeforeAfter] = useState<boolean>(false);
   const [selectedSolutions, setSelectedSolutions] = useState<Record<string, string>>({});
 
   const daySchedule = schedule.find(s => s.kun === selectedDay) || schedule[0];
   const dayGaps = gaps.filter(g => g.kun === selectedDay);
+
+  const getDayDisplay = (day: string) => {
+    if (lang === 'ru') return day === 'Dushanba' ? 'Понедельник' : 'Вторник';
+    if (lang === 'en') return day === 'Dushanba' ? 'Monday' : 'Tuesday';
+    return day;
+  };
 
   const handleSolutionSelect = (gapId: string, solutionKey: string) => {
     setSelectedSolutions(prev => ({
@@ -122,11 +128,15 @@ export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedu
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="p-6 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 space-y-4">
-              <div className="font-bold text-rose-700 dark:text-rose-400 text-sm">OLDINGI HOLAT / BEFORE</div>
+              <div className="font-bold text-rose-700 dark:text-rose-400 text-sm">
+                {lang === 'ru' ? 'ИСХОДНОЕ СОСТОЯНИЕ (ДО)' : lang === 'en' ? 'BEFORE INTERVENTION' : 'OLDINGI HOLAT'}
+              </div>
             </div>
 
             <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 space-y-4">
-              <div className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">HOZIRGI HOLAT / AFTER</div>
+              <div className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">
+                {lang === 'ru' ? 'ТЕКУЩЕЕ СОСТОЯНИЕ (ПОСЛЕ)' : lang === 'en' ? 'AFTER INTERVENTION' : 'HOZIRGI HOLAT'}
+              </div>
             </div>
           </div>
         </div>
@@ -152,7 +162,7 @@ export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedu
                     : 'bg-slate-100 dark:bg-slate-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200'
                 }`}
               >
-                {day}
+                {getDayDisplay(day)}
               </button>
             ))}
           </div>
@@ -162,7 +172,7 @@ export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedu
         <div className="space-y-4">
           <div className="flex justify-between items-center">
             <h3 className="font-bold text-base text-gray-900 dark:text-white">
-              {selectedDay} {t('timelineTitle')}
+              {getDayDisplay(selectedDay)} {t('timelineTitle')}
             </h3>
             <span className="text-xs text-rose-500 font-bold flex items-center gap-1">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block animate-pulse" />
@@ -172,11 +182,11 @@ export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedu
 
           <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
             <div className="flex justify-between text-[10px] font-bold text-gray-400">
-              <span>08:30 (1-juft)</span>
-              <span>10:00 (2-juft)</span>
-              <span>11:30 (3-juft)</span>
-              <span>13:00 (Tanaffus)</span>
-              <span>14:50 (Tugash)</span>
+              <span>08:30 (1-{lang === 'ru' ? 'пара' : lang === 'en' ? 'pair' : 'juft'})</span>
+              <span>10:00 (2-{lang === 'ru' ? 'пара' : lang === 'en' ? 'pair' : 'juft'})</span>
+              <span>11:30 (3-{lang === 'ru' ? 'пара' : lang === 'en' ? 'pair' : 'juft'})</span>
+              <span>13:00 ({lang === 'ru' ? 'Перемена' : lang === 'en' ? 'Break' : 'Tanaffus'})</span>
+              <span>14:50 ({lang === 'ru' ? 'Конец' : lang === 'en' ? 'End' : 'Tugash'})</span>
             </div>
 
             <div className="h-10 w-full rounded-xl bg-gray-200 dark:bg-slate-800 flex overflow-hidden p-1 gap-1">
@@ -186,7 +196,7 @@ export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedu
                   className="flex-1 bg-rose-500/90 text-white rounded-lg flex items-center justify-center text-[10px] font-bold relative group cursor-pointer border border-rose-400/50"
                   title={`${item.fan_nomi} (${item.vaqt})`}
                 >
-                  <span className="truncate px-1">{item.juftlik}-juft: {item.fan_nomi}</span>
+                  <span className="truncate px-1">{item.juftlik}-{lang === 'ru' ? 'пара' : lang === 'en' ? 'pair' : 'juft'}: {item.fan_nomi}</span>
                   <span className="absolute -top-1 -right-1 w-3 h-3 bg-rose-600 rounded-full border border-white" />
                 </div>
               ))}
@@ -216,7 +226,7 @@ export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedu
                       </div>
                       <div>
                         <h4 className="font-bold text-sm text-gray-900 dark:text-white">
-                          {gap.boshlanish} — {gap.tugash} ({gap.davomiylik_daq} daqiqa)
+                          {gap.boshlanish} — {gap.tugash} ({gap.davomiylik_daq} {lang === 'ru' ? 'минут' : lang === 'en' ? 'mins' : 'daqiqa'})
                         </h4>
                         <p className="text-xs text-rose-600 dark:text-rose-400 font-medium">
                           {t('gapRiskDesc')}

@@ -124,7 +124,7 @@ export const LMSModule: React.FC<LMSModuleProps> = ({
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 border-b border-indigo-800/60 pb-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30 text-xs font-bold">
-              <GraduationCap className="w-4 h-4 text-blue-400" /> Rasmiy LMS Moduli
+              <GraduationCap className="w-4 h-4 text-blue-400" /> {lang === 'ru' ? 'Официальный модуль LMS' : lang === 'en' ? 'Official LMS Module' : 'Rasmiy LMS Moduli'}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               {t('lmsTitle')}
@@ -147,7 +147,7 @@ export const LMSModule: React.FC<LMSModuleProps> = ({
 
             <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 space-y-1 text-right shrink-0">
               <div className="text-[10px] uppercase font-bold text-indigo-300 tracking-wider flex items-center gap-1 justify-end">
-                <Award className="w-3.5 h-3.5 text-amber-400" /> Reyting
+                <Award className="w-3.5 h-3.5 text-amber-400" /> {lang === 'ru' ? 'Рейтинг' : lang === 'en' ? 'Rating' : 'Reyting'}
               </div>
               <div className="text-2xl font-extrabold text-white">
                 {totalRating} <span className="text-xs text-indigo-300 font-normal">/ 100</span>
@@ -164,14 +164,14 @@ export const LMSModule: React.FC<LMSModuleProps> = ({
         <div className="lg:col-span-4 space-y-3">
           <div className="flex justify-between items-center px-1">
             <h3 className="font-bold text-sm text-gray-900 dark:text-white uppercase tracking-wider">
-              Mavzular ({topics.length}):
+              {lang === 'ru' ? `Темы (${topics.length}):` : lang === 'en' ? `Topics (${topics.length}):` : `Mavzular (${topics.length}):`}
             </h3>
             {canManageContent && (
               <button
                 onClick={handleOpenAddModal}
                 className="text-xs text-emerald-600 dark:text-emerald-400 font-bold hover:underline flex items-center gap-1"
               >
-                <Plus className="w-3.5 h-3.5" /> Qo'shish
+                <Plus className="w-3.5 h-3.5" /> {lang === 'ru' ? 'Добавить' : lang === 'en' ? 'Add' : 'Qo\'shish'}
               </button>
             )}
           </div>

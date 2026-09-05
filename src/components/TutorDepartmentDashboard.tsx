@@ -18,7 +18,7 @@ interface TutorDepartmentDashboardProps {
 }
 
 export const TutorDepartmentDashboard: React.FC<TutorDepartmentDashboardProps> = ({ userRole }) => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [activeSubView, setActiveSubView] = useState<'tutor' | 'department'>(userRole === 'tyutor' ? 'tutor' : 'department');
   const [exportNotice, setExportNotice] = useState<string | null>(null);
 
@@ -97,13 +97,16 @@ export const TutorDepartmentDashboard: React.FC<TutorDepartmentDashboardProps> =
           <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-gray-100 dark:border-slate-700 shadow-xl space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-gray-100 dark:border-slate-700 pb-4">
               <div>
-                <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">301-Pedagogika guruhi (28 talaba)</span>
+                <span className="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400">
+                  {lang === 'ru' ? 'Группа 301-Педагогика (28 студентов)' : lang === 'en' ? 'Group 301-Pedagogics (28 students)' : '301-Pedagogika guruhi (28 talaba)'}
+                </span>
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mt-1">
-                  Haftalik Guruh Hisoboti (3 ta ko'rsatkich)
+                  {lang === 'ru' ? 'Еженедельный отчет группы (3 показателя)' : lang === 'en' ? 'Weekly Group Report (3 metrics)' : 'Haftalik Guruh Hisoboti (3 ta ko\'rsatkich)'}
                 </h2>
               </div>
               <span className="px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-300 font-extrabold text-xs flex items-center gap-1">
-                <Lock className="w-3.5 h-3.5 text-emerald-500" /> Maxfiylik Himoyalangan
+                <Lock className="w-3.5 h-3.5 text-emerald-500" />
+                {lang === 'ru' ? 'Конфиденциальность защищена' : lang === 'en' ? 'Privacy Protected' : 'Maxfiylik Himoyalangan'}
               </span>
             </div>
 
@@ -111,21 +114,27 @@ export const TutorDepartmentDashboard: React.FC<TutorDepartmentDashboardProps> =
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               
               <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
-                <span className="text-xs text-gray-500 dark:text-gray-400">1. Guruh o'rtacha kunlik qadami:</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {lang === 'ru' ? '1. Среднесуточные шаги группы:' : lang === 'en' ? '1. Group daily average steps:' : '1. Guruh o\'rtacha kunlik qadami:'}
+                </span>
                 <div className="text-3xl font-extrabold text-gray-900 dark:text-white">
-                  8 750 <span className="text-xs text-gray-400 font-normal">qadam/kun</span>
+                  8 750 <span className="text-xs text-gray-400 font-normal">{lang === 'ru' ? 'шагов/день' : lang === 'en' ? 'steps/day' : 'qadam/kun'}</span>
                 </div>
               </div>
 
               <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
-                <span className="text-xs text-gray-500 dark:text-gray-400">2. Faol daqiqalar me'yoriga erishganlar:</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {lang === 'ru' ? '2. Достигшие нормы активных минут:' : lang === 'en' ? '2. Reached active minutes norm:' : '2. Faol daqiqalar me\'yoriga erishganlar:'}
+                </span>
                 <div className="text-3xl font-extrabold text-teal-600 dark:text-teal-400">
                   82,1 %
                 </div>
               </div>
 
               <div className="p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
-                <span className="text-xs text-gray-500 dark:text-gray-400">3. Monitoringni muntazam yuritganlar:</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  {lang === 'ru' ? '3. Регулярно ведут мониторинг:' : lang === 'en' ? '3. Regular monitoring users:' : '3. Monitoringni muntazam yuritganlar:'}
+                </span>
                 <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400">
                   92,8 %
                 </div>
@@ -161,41 +170,46 @@ export const TutorDepartmentDashboard: React.FC<TutorDepartmentDashboardProps> =
           {/* Group Comparison Table */}
           <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-gray-100 dark:border-slate-700 shadow-xl space-y-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <Users className="w-5 h-5 text-emerald-500" /> Tajriba va Nazorat Guruhlari Taqqoslama Ko'rsatkichlari
+              <Users className="w-5 h-5 text-emerald-500" />
+              {lang === 'ru' 
+                ? 'Сравнительные показатели экспериментальной и контрольной групп' 
+                : lang === 'en' 
+                ? 'Experimental & Control Group Comparison Metrics' 
+                : 'Tajriba va Nazorat Guruhlari Taqqoslama Ko\'rsatkichlari'}
             </h2>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="border-b border-gray-200 dark:border-slate-700 uppercase text-gray-400 font-bold">
-                    <th className="py-3 px-3">Guruh</th>
+                    <th className="py-3 px-3">{lang === 'ru' ? 'Группа' : lang === 'en' ? 'Group' : 'Guruh'}</th>
                     <th className="py-3 px-3">Pre-test (X̄ ± SD)</th>
                     <th className="py-3 px-3">Post-test (X̄ ± SD)</th>
-                    <th className="py-3 px-3">O'rtacha Qadam</th>
-                    <th className="py-3 px-3">O'tirish (daq)</th>
+                    <th className="py-3 px-3">{lang === 'ru' ? 'Средние шаги' : lang === 'en' ? 'Average Steps' : 'O\'rtacha Qadam'}</th>
+                    <th className="py-3 px-3">{lang === 'ru' ? 'Сидение (мин)' : lang === 'en' ? 'Sitting (mins)' : 'O\'tirish (daq)'}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 dark:divide-slate-800 font-medium">
                   <tr className="bg-emerald-50/50 dark:bg-emerald-950/20">
                     <td className="py-4 px-3 font-bold text-emerald-700 dark:text-emerald-400">
-                      {stats.tajriba_guruh.nomi}
+                      {lang === 'ru' ? stats.tajriba_guruh.nomi.replace('(Tajriba)', '(Экспериментальная)') : lang === 'en' ? stats.tajriba_guruh.nomi.replace('(Tajriba)', '(Experimental)') : stats.tajriba_guruh.nomi}
                     </td>
                     <td className="py-4 px-3">{stats.tajriba_guruh.pre_test_mean} ± {stats.tajriba_guruh.pre_test_sd}</td>
                     <td className="py-4 px-3 font-extrabold text-emerald-600 text-sm">
                       {stats.tajriba_guruh.post_test_mean} ± {stats.tajriba_guruh.post_test_sd}
                     </td>
                     <td className="py-4 px-3 font-bold">{stats.tajriba_guruh.qadam_mean.toLocaleString()}</td>
-                    <td className="py-4 px-3 text-emerald-600 font-bold">{stats.tajriba_guruh.otirish_mean} daq</td>
+                    <td className="py-4 px-3 text-emerald-600 font-bold">{stats.tajriba_guruh.otirish_mean} {lang === 'ru' ? 'мин' : lang === 'en' ? 'mins' : 'daq'}</td>
                   </tr>
 
                   <tr>
                     <td className="py-4 px-3 font-bold text-slate-600 dark:text-slate-400">
-                      {stats.nazorat_guruh.nomi}
+                      {lang === 'ru' ? stats.nazorat_guruh.nomi.replace('(Nazorat)', '(Контрольная)') : lang === 'en' ? stats.nazorat_guruh.nomi.replace('(Nazorat)', '(Control)') : stats.nazorat_guruh.nomi}
                     </td>
                     <td className="py-4 px-3">{stats.nazorat_guruh.pre_test_mean} ± {stats.nazorat_guruh.pre_test_sd}</td>
                     <td className="py-4 px-3 font-bold">{stats.nazorat_guruh.post_test_mean} ± {stats.nazorat_guruh.post_test_sd}</td>
                     <td className="py-4 px-3">{stats.nazorat_guruh.qadam_mean.toLocaleString()}</td>
-                    <td className="py-4 px-3 text-rose-500 font-bold">{stats.nazorat_guruh.otirish_mean} daq</td>
+                    <td className="py-4 px-3 text-rose-500 font-bold">{stats.nazorat_guruh.otirish_mean} {lang === 'ru' ? 'мин' : lang === 'en' ? 'mins' : 'daq'}</td>
                   </tr>
                 </tbody>
               </table>
