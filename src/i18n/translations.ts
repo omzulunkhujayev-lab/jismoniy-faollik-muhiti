@@ -64,6 +64,60 @@ export const translations = {
     fieldMood: "Kayfiyat va ish qobiliyati (5 ballik shkala)",
     fieldReflection: "Kunlik refleksiya (1–2 jumla, ixtiyoriy)",
     btnSaveDiary: "Kundalikka saqlash (Yopiq halqaga kiritish)",
+    historyTitle: "Oxirgi kiritilgan yozuvlar tarixi",
+
+    // Weekly Profile
+    weeklyTitle: "Haftalik Faollik Profili",
+    weeklySubtitle: "Teskari aloqa va tahlil bo'g'ini",
+    weeklyAvgSteps: "O'rtacha kunlik qadam",
+    weeklyActiveMins: "Haftalik faol daqiqalar",
+    weeklyLongestSitting: "Eng uzun uzluksiz o'tirish",
+    reflectionSectionTitle: "Hafta yakunidagi refleksiya savollari (Majburiy bo'g'in)",
+    goalSectionTitle: "Maqsad Qo'yish Moduli",
+
+    // Activity Gap Analysis
+    gapsTitle: "«Faollik uzilishlari» tahlili (Activity Gap Analysis)",
+    gapsSubtitle: "Dars jadvali va monitoring ma'lumotlarini taqqoslab, 60+ daqiqalik uzluksiz o'tirishlarni aniqlash",
+    gapSolutionTitle: "Aniqlangan har bir faollik uzilishi uchun to'ldirish variantini biriktiring:",
+
+    // Cards Bank
+    cardsTitle: "«Faollik kartochkalari» banki",
+    cardsSubtitle: "Mashg'ulotlar va turmush tarziga moslashtirilgan mikrofaollik pauzalari katalogi",
+    filterAllTypes: "Barcha pauza turlari",
+    filterHygienic: "Gigiyenik-tiklovchi (2-3 daq.)",
+    filterCognitive: "Kognitiv-faollashtiruvchi (3-5 daq.)",
+    filterProfessional: "Kasbiy-metodik (3-5 daq.)",
+    filterSeated: "O'rindan turmasdan",
+    filterMoving: "Auditoriyada harakatlanib",
+
+    // LMS
+    lmsTitle: "«Raqamli faollik madaniyati» moduli",
+    lmsHoursInfo: "2 kredit (60 soat: 16 soat ma'ruza + 24 soat amaliy + 20 soat mustaqil ta'lim)",
+    btnAddTopic: "Yangi Ma'ruza va Media Yuklash",
+
+    // Diagnostics
+    diagTitle: "Diagnostika Moduli",
+    diagSub: "3 nuqtali kompleks diagnostika (Kirish → Oraliq → Yakuniy)",
+    tabTest: "25-Topshiriqli Bilim Testi",
+    tabAnketa: "Anonim Anketa (4 qism)",
+    tabKuzatuv: "O'qituvchi Kuzatuv Kartasi",
+    tabEkspert: "Ekspert Baholash Varag'i",
+    tabEsse: "Refleksiv Esse",
+
+    // Assessment & Levels
+    assessTitle: "Baholash va Darajalar Tizimi",
+    assessSub: "Mutlaq jismoniy ko'rsatkichlar baholanmaydi! Baholanadigan narsa — monitoring muntazamligi, tahlil sifati va metodik ko'nikmalar.",
+    layer1Title: "Birinchi Qatlam: Obyektiv ko'rsatkichlar (30% ulush)",
+    layer2Title: "Ikkinchi Qatlam: 4 Pedagogik Mezon (70% ulush)",
+
+    // Gamification
+    gamTitle: "Ijtimoiy Rag'bat va Guruh Chellenjlari",
+    gamSub: "Moddiy emas, faqat ijtimoiy e'tirof! Musobaqalar guruhiy formatda o'tkaziladi.",
+
+    // Dashboards
+    teacherDashTitle: "Mashg'ulotlar Rejasi va Kuzatuv Kartalari",
+    tutorDashTitle: "Guruh Bo'yicha Umumlashtirilgan Hisobot",
+    deptDashTitle: "Tajriba va Nazorat Guruhlari Statistikasi",
 
     // Common Buttons
     btnSave: "Saqlash",
@@ -144,6 +198,60 @@ export const translations = {
     fieldMood: "Настроение и работоспособность (5-балльная шкала)",
     fieldReflection: "Дневная рефлексия (1–2 предложения, опционально)",
     btnSaveDiary: "Сохранить в дневник (Внести в замкнутый цикл)",
+    historyTitle: "История последних записей",
+
+    // Weekly Profile
+    weeklyTitle: "Недельный Профиль Активности",
+    weeklySubtitle: "Звено обратной связи и анализа",
+    weeklyAvgSteps: "Средние дневные шаги",
+    weeklyActiveMins: "Активные минуты за неделю",
+    weeklyLongestSitting: "Самое длительное сидение",
+    reflectionSectionTitle: "Вопросы рефлексии в конце недели (Обязательное звено)",
+    goalSectionTitle: "Модуль Постановки Цели",
+
+    // Activity Gap Analysis
+    gapsTitle: "Анализ разрывов активности (Activity Gap Analysis)",
+    gapsSubtitle: "Сравнение расписания и мониторинга для выявления непрерывного сидения >60 мин",
+    gapSolutionTitle: "Прикрепите вариант компенсации для каждого выявления:",
+
+    // Cards Bank
+    cardsTitle: "Банк карточек активности",
+    cardsSubtitle: "Каталог микропауз активности, адаптированных к занятиям",
+    filterAllTypes: "Все типы пауз",
+    filterHygienic: "Гигиеническо-восстановительные (2-3 мин.)",
+    filterCognitive: "Когнитивно-активизирующие (3-5 мин.)",
+    filterProfessional: "Профессионально-методические (3-5 мин.)",
+    filterSeated: "Не вставая с места",
+    filterMoving: "С перемещением по аудитории",
+
+    // LMS
+    lmsTitle: "Модуль «Культура цифровой активности»",
+    lmsHoursInfo: "2 кредита (60 часов: 16 ч лекции + 24 ч практика + 20 ч самост. работа)",
+    btnAddTopic: "Загрузить новую лекцию и медиа",
+
+    // Diagnostics
+    diagTitle: "Модуль Диагностики",
+    diagSub: "3-точечная комплексная диагностика (Входная → Промежуточная → Итоговая)",
+    tabTest: "Тест знаний из 25 заданий",
+    tabAnketa: "Анонимная анкета (4 части)",
+    tabKuzatuv: "Карта наблюдения преподавателя",
+    tabEkspert: "Лист экспертной оценки",
+    tabEsse: "Рефлексивное эссе",
+
+    // Assessment & Levels
+    assessTitle: "Система Оценивания и Уровней",
+    assessSub: "Абсолютные шаги не оцениваются! Оценивается регулярность мониторинга, качество анализа и методические навыки.",
+    layer1Title: "Первый слой: Объективные показатели (30% доля)",
+    layer2Title: "Второй слой: 4 педагогических критерия (70% доля)",
+
+    // Gamification
+    gamTitle: "Социальные Стимулы и Групповые Челленджи",
+    gamSub: "Не материальное, а только социальное признание! Соревнования проводятся в групповом формате.",
+
+    // Dashboards
+    teacherDashTitle: "План Занятий и Карты Наблюдения",
+    tutorDashTitle: "Обобщенный Отчет по Группе",
+    deptDashTitle: "Статистика Экспериментальной и Контрольной Групп",
 
     // Common Buttons
     btnSave: "Сохранить",
@@ -224,6 +332,60 @@ export const translations = {
     fieldMood: "Mood & Productivity (5-point scale)",
     fieldReflection: "Daily Reflection (1–2 sentences, optional)",
     btnSaveDiary: "Save to Diary (Enter Closed Loop)",
+    historyTitle: "Recent Entry History",
+
+    // Weekly Profile
+    weeklyTitle: "Weekly Activity Profile",
+    weeklySubtitle: "Feedback & Analysis Link",
+    weeklyAvgSteps: "Average Daily Steps",
+    weeklyActiveMins: "Weekly Active Minutes",
+    weeklyLongestSitting: "Longest Sitting",
+    reflectionSectionTitle: "End-of-Week Reflection Questions (Mandatory Link)",
+    goalSectionTitle: "Goal Setting Module",
+
+    // Activity Gap Analysis
+    gapsTitle: "Activity Gap Analysis",
+    gapsSubtitle: "Comparing schedule and monitoring data to detect continuous sitting >60 min",
+    gapSolutionTitle: "Attach a solution option for each identified gap:",
+
+    // Cards Bank
+    cardsTitle: "Activity Cards Bank",
+    cardsSubtitle: "Catalog of classroom-adapted microactivity movement pauses",
+    filterAllTypes: "All Pause Types",
+    filterHygienic: "Hygienic-Restorative (2-3 mins)",
+    filterCognitive: "Cognitive-Activating (3-5 mins)",
+    filterProfessional: "Professional-Methodological (3-5 mins)",
+    filterSeated: "Without Leaving Seat",
+    filterMoving: "Moving in Classroom",
+
+    // LMS
+    lmsTitle: "Digital Activity Culture Module",
+    lmsHoursInfo: "2 credits (60 hours: 16h lecture + 24h practical + 20h self-study)",
+    btnAddTopic: "Upload New Lecture & Media",
+
+    // Diagnostics
+    diagTitle: "Diagnostics Module",
+    diagSub: "3-Point Comprehensive Diagnostics (Entry → Mid → Final)",
+    tabTest: "25-Question Knowledge Test",
+    tabAnketa: "Anonymous Questionnaire (4 Parts)",
+    tabKuzatuv: "Teacher Observation Card",
+    tabEkspert: "Expert Rubric Sheet",
+    tabEsse: "Reflective Essay",
+
+    // Assessment & Levels
+    assessTitle: "Assessment & Level System",
+    assessSub: "Absolute steps are not graded! Monitoring regularity, analysis quality, and methodological skills are evaluated.",
+    layer1Title: "First Layer: Objective Indicators (30% weight)",
+    layer2Title: "Second Layer: 4 Pedagogical Criteria (70% weight)",
+
+    // Gamification
+    gamTitle: "Social Incentives & Group Challenges",
+    gamSub: "Not monetary, strictly social recognition! Competitions are conducted in a group format.",
+
+    // Dashboards
+    teacherDashTitle: "Lesson Plan & Observation Cards",
+    tutorDashTitle: "Group Summary Report",
+    deptDashTitle: "Experimental & Control Group Statistics",
 
     // Common Buttons
     btnSave: "Save",
