@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Assessment } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   Award, 
   ShieldCheck, 
@@ -17,6 +18,7 @@ interface AssessmentLevelsProps {
 }
 
 export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments }) => {
+  const { t, lang } = useLanguage();
   const currentAss = assessments[assessments.length - 1] || assessments[0];
 
   // Triangulation Discrepancy Flag state
@@ -26,11 +28,11 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
   const getLevelBadge = (daraja: string) => {
     switch (daraja) {
       case 'yuqori':
-        return <span className="px-3.5 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-extrabold text-xs border border-emerald-300">Yuqori daraja (86–100 ball)</span>;
+        return <span className="px-3.5 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-extrabold text-xs border border-emerald-300">{t('levelHigh')} (86–100)</span>;
       case 'orta':
-        return <span className="px-3.5 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-extrabold text-xs border border-amber-300">O'rta daraja (71–85 ball)</span>;
+        return <span className="px-3.5 py-1.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-extrabold text-xs border border-amber-300">{t('levelMedium')} (71–85)</span>;
       default:
-        return <span className="px-3.5 py-1.5 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 font-extrabold text-xs border border-rose-300">Quyi daraja (70 va undan past)</span>;
+        return <span className="px-3.5 py-1.5 rounded-full bg-rose-100 dark:bg-rose-950 text-rose-700 dark:text-rose-300 font-extrabold text-xs border border-rose-300">{t('levelLow')} (≤70)</span>;
     }
   };
 
@@ -42,19 +44,19 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-800 pb-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold mb-2">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Ilmiy-pedagogik etika talabi
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> {lang === 'ru' ? 'Требование научно-педагогической этики' : lang === 'en' ? 'Scientific-Pedagogical Ethics Requirement' : 'Ilmiy-pedagogik etika talabi'}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Baholash va Darajalar Tizimi
+              {t('assessTitle')}
             </h1>
             <p className="text-slate-300 text-xs sm:text-sm mt-1 max-w-3xl">
-              Mutlaq jismoniy ko'rsatkichlar (qadamlar soni) hech qachon to'g'ridan-to'g'ri bahoga aylanmaydi! Baholanadigan narsa — monitoring muntazamligi, tahlil sifati va metodik ko'nikmalardir.
+              {t('assessSub')}
             </p>
           </div>
 
           <div className="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 text-right shrink-0">
-            <div className="text-[10px] uppercase font-bold text-emerald-300">Integral Baho</div>
-            <div className="text-2xl font-extrabold text-white">{currentAss.integral_ball} ball</div>
+            <div className="text-[10px] uppercase font-bold text-emerald-300">{lang === 'ru' ? 'Интегральная Оценка' : lang === 'en' ? 'Integral Score' : 'Integral Baho'}</div>
+            <div className="text-2xl font-extrabold text-white">{currentAss.integral_ball} pts</div>
             <div className="mt-1">{getLevelBadge(currentAss.daraja)}</div>
           </div>
         </div>
@@ -67,25 +69,25 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
         <div className="md:col-span-4 bg-white dark:bg-slate-800 rounded-3xl p-6 border border-gray-100 dark:border-slate-700 shadow-xl space-y-4">
           <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 font-extrabold text-sm border-b border-gray-100 dark:border-slate-700 pb-3">
             <Layers className="w-5 h-5" />
-            <span>Birinchi Qatlam: Obyektiv ko'rsatkichlar (30% ulush)</span>
+            <span>{t('layer1Title')}</span>
           </div>
 
           <p className="text-xs text-gray-500 leading-relaxed">
-            Qadamlar, faol daqiqalar va uyqu vaqti bo'yicha monitoring yuritish intizomi va muntazamligi.
+            {lang === 'ru' ? 'Дисциплина и регулярность ведения мониторинга шагов, активных минут и сна.' : lang === 'en' ? 'Discipline and regularity of monitoring steps, active minutes, and sleep.' : 'Qadamlar, faol daqiqalar va uyqu vaqti bo\'yicha monitoring yuritish intizomi va muntazamligi.'}
           </p>
 
           <div className="space-y-3 pt-2">
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex justify-between items-center text-xs">
-              <span className="text-gray-600 dark:text-gray-400">Monitoring muntazamligi (30 kun):</span>
+              <span className="text-gray-600 dark:text-gray-400">{lang === 'ru' ? 'Регулярность мониторинга (30 дн):' : lang === 'en' ? 'Monitoring regularity (30d):' : 'Monitoring muntazamligi (30 kun):'}</span>
               <span className="font-extrabold text-emerald-600">92%</span>
             </div>
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex justify-between items-center text-xs">
-              <span className="text-gray-600 dark:text-gray-400">Pauza o'tkazish faolligi:</span>
-              <span className="font-extrabold text-emerald-600">4,2 pauza / kun</span>
+              <span className="text-gray-600 dark:text-gray-400">{lang === 'ru' ? 'Активность проведения пауз:' : lang === 'en' ? 'Pause activity:' : 'Pauza o\'tkazish faolligi:'}</span>
+              <span className="font-extrabold text-emerald-600">4.2 / day</span>
             </div>
             <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex justify-between items-center text-xs">
-              <span className="text-gray-600 dark:text-gray-400">Obyektiv Qatlam Balli:</span>
-              <span className="font-extrabold text-emerald-600">{currentAss.obyektiv_ball} / 100 ball</span>
+              <span className="text-gray-600 dark:text-gray-400">{lang === 'ru' ? 'Балл объективного слоя:' : lang === 'en' ? 'Objective Layer Score:' : 'Obyektiv Qatlam Balli:'}</span>
+              <span className="font-extrabold text-emerald-600">{currentAss.obyektiv_ball} / 100</span>
             </div>
           </div>
         </div>
@@ -94,9 +96,9 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
         <div className="md:col-span-8 bg-white dark:bg-slate-800 rounded-3xl p-6 border border-gray-100 dark:border-slate-700 shadow-xl space-y-6">
           <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-3">
             <h3 className="font-extrabold text-base text-gray-900 dark:text-white flex items-center gap-2">
-              <Award className="w-5 h-5 text-emerald-500" /> Ikkinchi Qatlam: 4 Pedagogik Mezon (70% ulush)
+              <Award className="w-5 h-5 text-emerald-500" /> {t('layer2Title')}
             </h3>
-            <span className="text-xs text-gray-400 font-medium">Har bir mezon 100 ballik shkalada</span>
+            <span className="text-xs text-gray-400 font-medium">{lang === 'ru' ? 'Каждый критерий по 100-балльной шкале' : lang === 'en' ? 'Each criterion on a 100-point scale' : 'Har bir mezon 100 ballik shkalada'}</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -104,44 +106,44 @@ export const AssessmentLevels: React.FC<AssessmentLevelsProps> = ({ assessments 
             {/* Criteria 1 */}
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-2">
               <div className="flex justify-between items-center">
-                <span className="font-bold text-xs text-emerald-700 dark:text-emerald-400">1. Motivatsion-qadriyatli</span>
-                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.motivatsion_ball} ball</span>
+                <span className="font-bold text-xs text-emerald-700 dark:text-emerald-400">{t('crit1Title')}</span>
+                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.motivatsion_ball} pts</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-tight">
-                Barqaror ehtiyoj, kasbiy mas'uliyatni anglash. (Vositasi: Anketa, suhbat)
+                {t('crit1Desc')}
               </p>
             </div>
 
             {/* Criteria 2 */}
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-2">
               <div className="flex justify-between items-center">
-                <span className="font-bold text-xs text-teal-700 dark:text-teal-400">2. Kognitiv-metodik</span>
-                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.kognitiv_ball} ball</span>
+                <span className="font-bold text-xs text-teal-700 dark:text-teal-400">{t('crit2Title')}</span>
+                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.kognitiv_ball} pts</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-tight">
-                Me'yorlar, o'tirg'ich xulq-atvor, pauzalar metodikasi bo'yicha bilim. (Vositasi: Test, keys)
+                {t('crit2Desc')}
               </p>
             </div>
 
             {/* Criteria 3 */}
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-2">
               <div className="flex justify-between items-center">
-                <span className="font-bold text-xs text-blue-700 dark:text-blue-400">3. Faoliyatli-monitoring</span>
-                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.faoliyatli_ball} ball</span>
+                <span className="font-bold text-xs text-blue-700 dark:text-blue-400">{t('crit3Title')}</span>
+                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.faoliyatli_ball} pts</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-tight">
-                Monitoring muntazamligi, pauza o'tkaza olish, rejani bajarish. (Vositasi: Kundalik, kuzatuv)
+                {t('crit3Desc')}
               </p>
             </div>
 
             {/* Criteria 4 */}
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-2">
               <div className="flex justify-between items-center">
-                <span className="font-bold text-xs text-purple-700 dark:text-purple-400">4. Refleksiv-korreksion</span>
-                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.refleksiv_ball} ball</span>
+                <span className="font-bold text-xs text-purple-700 dark:text-purple-400">{t('crit4Title')}</span>
+                <span className="font-extrabold text-xs text-gray-900 dark:text-white">{currentAss.refleksiv_ball} pts</span>
               </div>
               <p className="text-[11px] text-gray-500 leading-tight">
-                Profilni tahlil qilish, sabab aniqlash, maqsad qo'yish. (Vositasi: Esse, shaxsiy reja)
+                {t('crit4Desc')}
               </p>
             </div>
 

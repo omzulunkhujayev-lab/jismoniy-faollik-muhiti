@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Badge, Challenge } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   Trophy, 
   Award, 
@@ -21,6 +22,7 @@ interface GamificationModuleProps {
 }
 
 export const GamificationModule: React.FC<GamificationModuleProps> = ({ badges, challenge }) => {
+  const { t, lang } = useLanguage();
   const [activeGamTab, setActiveGamTab] = useState<'challenge' | 'rules' | 'badges'>('challenge');
 
   // 5 Rules checklist state
@@ -46,21 +48,21 @@ export const GamificationModule: React.FC<GamificationModuleProps> = ({ badges, 
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-amber-500/40 pb-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-bold mb-2">
-              <Trophy className="w-3.5 h-3.5 text-amber-300" /> Rag'batlantirish Bo'g'ini (Gamifikatsiya)
+              <Trophy className="w-3.5 h-3.5 text-amber-300" /> {t('tabGamification')}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Ijtimoiy Rag'bat va Guruh Chellenjlari
+              {t('gamTitle')}
             </h1>
             <p className="text-amber-100 text-xs sm:text-sm mt-1 max-w-3xl">
-              Moddiy emas, faqat ijtimoiy e'tirof! Musobaqalar guruhiy formatda o'tkazilib, kuchsiz ishtirokchini ajratmaydi.
+              {t('gamSub')}
             </p>
           </div>
 
           <div className="flex items-center gap-2">
             <div className="px-4 py-2 rounded-2xl bg-white/10 backdrop-blur-md text-right border border-white/20">
-              <div className="text-[10px] uppercase font-bold text-amber-200">Faol Nishonlar</div>
+              <div className="text-[10px] uppercase font-bold text-amber-200">{lang === 'ru' ? 'Активные бейджи' : lang === 'en' ? 'Active Badges' : 'Faol Nishonlar'}</div>
               <div className="text-lg font-extrabold text-white">
-                {badges.filter(b => b.olindi).length} / {badges.length} olindi
+                {badges.filter(b => b.olindi).length} / {badges.length}
               </div>
             </div>
           </div>
@@ -69,9 +71,9 @@ export const GamificationModule: React.FC<GamificationModuleProps> = ({ badges, 
         {/* Gamification Sub-Nav */}
         <div className="flex items-center gap-2 pt-2">
           {[
-            { id: 'challenge', label: '«Guruh qadami» Musobaqasi', icon: Users },
-            { id: 'rules', label: '«Faol hafta» 5 qoidasi', icon: Flame },
-            { id: 'badges', label: 'Nishonlar va E\'tirof', icon: Award },
+            { id: 'challenge', label: t('gamTab1'), icon: Users },
+            { id: 'rules', label: t('gamTab2'), icon: Flame },
+            { id: 'badges', label: t('gamTab3'), icon: Award },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeGamTab === tab.id;

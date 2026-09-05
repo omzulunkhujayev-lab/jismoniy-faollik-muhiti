@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Card, ScheduleItem, ObservationCard } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   UserCheck, 
   PlusCircle, 
@@ -25,6 +26,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   observationCards,
   onAddObservation
 }) => {
+  const { t, lang } = useLanguage();
   const [selectedSubject, setSelectedSubject] = useState('Pedagogika nazariyasi');
   const [attachedCardId, setAttachedCardId] = useState('card_17');
   const [notice, setNotice] = useState<string | null>(null);
@@ -36,7 +38,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   const [obsIzoh, setObsIzoh] = useState("301-guruh talabalari mashg'ulotning 40-daqiqasida pozitsion pauzani bajardilar.");
 
   const handleAttachCard = () => {
-    setNotice(`'Kartochka #${attachedCardId.replace('card_', '')}' ${selectedSubject} darsiga muvaffaqiyatli biriktirildi!`);
+    setNotice(`'Card #${attachedCardId.replace('card_', '')}' -> ${selectedSubject}`);
     setTimeout(() => setNotice(null), 3000);
   };
 
@@ -52,7 +54,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       izoh: obsIzoh,
       sana: new Date().toISOString().split('T')[0]
     });
-    setNotice("Kuzatuv kartasi saqlandi!");
+    setNotice(lang === 'ru' ? 'Карта наблюдения сохранена!' : lang === 'en' ? 'Observation card saved!' : 'Kuzatuv kartasi saqlandi!');
     setTimeout(() => setNotice(null), 3000);
   };
 
@@ -64,13 +66,13 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-teal-800/40 pb-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold mb-2">
-              <UserCheck className="w-3.5 h-3.5" /> Fan O'qituvchisi Paneli
+              <UserCheck className="w-3.5 h-3.5" /> {t('roleTeacher')}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Mashg'ulotlar Rejasi va Kuzatuv Kartalari
+              {t('teacherDashTitle')}
             </h1>
             <p className="text-teal-100 text-xs sm:text-sm mt-1 max-w-3xl">
-              Auditoriya mashg'ulotlariga mikrofaollik pauzalarini biriktirish va darsdagi kuzatuvlarni rasmiylashtirish.
+              {lang === 'ru' ? 'Привязка микропауз к аудиторным занятиям и оформление наблюдений.' : lang === 'en' ? 'Attaching microactivity pauses to classroom lessons and recording observations.' : 'Auditoriya mashg\'ulotlariga mikrofaollik pauzalarini biriktirish va darsdagi kuzatuvlarni rasmiylashtirish.'}
             </p>
           </div>
 

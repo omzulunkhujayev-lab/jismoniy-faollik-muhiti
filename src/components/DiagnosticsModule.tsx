@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ObservationCard } from '../types';
+import { useLanguage } from '../context/LanguageContext';
 import { 
   ClipboardCheck, 
   CheckCircle2, 
@@ -23,6 +24,7 @@ export const DiagnosticsModule: React.FC<DiagnosticsModuleProps> = ({
   observationCards,
   onAddObservation
 }) => {
+  const { t, lang } = useLanguage();
   const [assessmentPoint, setAssessmentPoint] = useState<'kirish' | 'oraliq' | 'yakuniy'>('oraliq');
   const [activeDiagTab, setActiveDiagTab] = useState<'anketa' | 'test' | 'kuzatuv' | 'ekspert' | 'esse'>('test');
 
@@ -38,19 +40,38 @@ export const DiagnosticsModule: React.FC<DiagnosticsModuleProps> = ({
   // 25-Item Knowledge Test State
   // 25 items generated programmatically
   const generate25TestQuestions = () => {
-    return Array.from({ length: 25 }, (_, i) => ({
-      id: i + 1,
-      question: `${i + 1}-topshiriq. ${
-        i === 0 ? "O'tirg'ich xulq-atvorda energiya sarfi necha MET dan oshmaydi?" :
-        i === 1 ? "JSST tavsiyasiga ko'ra haftalik o'rtacha jadallikdagi faollik me'yori qancha?" :
-        i === 2 ? "Mikrofaollik pauzasining ruxsat etilgan maksimal davomiyligi qancha?" :
-        i === 3 ? "Yopiq halqa tizimining nechanchi bo'g'inida grafikli teskari aloqa beriladi?" :
-        i === 4 ? "Talaba kunlik uzluksiz o'tirish vaqti necha daqiqadan oshsa 'uzilish' belgilanadi?" :
-        `Pedagogik faollik va o'tirg'ich xulq-atvorni baholash bo'yicha ${i + 1}-savol.`
-      }`,
-      options: ['1.0 MET', '1.5 MET', '2.0 MET', '3.0 MET'],
-      correct: 1
-    }));
+    return Array.from({ length: 25 }, (_, i) => {
+      let qText = "";
+      if (lang === 'ru') {
+        qText = i === 0 ? "Каков максимальный расход энергии (MET) при малоподвижном поведении?" :
+                i === 1 ? "Какова недельная норма активности средней интенсивности по рекомендации ВОЗ?" :
+                i === 2 ? "Какова максимально допустимая продолжительность физкультпаузы?" :
+                i === 3 ? "На каком этапе замкнутого цикла предоставляется графическая обратная связь?" :
+                i === 4 ? "При превышении скольких минут непрерывного сидения фиксируется «разрыв»?" :
+                `Вопрос №${i + 1} по оценке педагогической активности и сидячего поведения.`;
+      } else if (lang === 'en') {
+        qText = i === 0 ? "What is the maximum energy expenditure (MET) in sedentary behavior?" :
+                i === 1 ? "What is WHO's recommended weekly norm for moderate intensity activity?" :
+                i === 2 ? "What is the maximum allowed duration for a microactivity pause?" :
+                i === 3 ? "At which link of the closed loop system is graphical feedback provided?" :
+                i === 4 ? "After how many minutes of continuous sitting is an 'activity gap' triggered?" :
+                `Question #${i + 1} regarding pedagogical activity and sedentary behavior assessment.`;
+      } else {
+        qText = i === 0 ? "O'tirg'ich xulq-atvorda energiya sarfi necha MET dan oshmaydi?" :
+                i === 1 ? "JSST tavsiyasiga ko'ra haftalik o'rtacha jadallikdagi faollik me'yori qancha?" :
+                i === 2 ? "Mikrofaollik pauzasining ruxsat etilgan maksimal davomiyligi qancha?" :
+                i === 3 ? "Yopiq halqa tizimining nechanchi bo'g'inida grafikli teskari aloqa beriladi?" :
+                i === 4 ? "Talaba kunlik uzluksiz o'tirish vaqti necha daqiqadan oshsa 'uzilish' belgilanadi?" :
+                `Pedagogik faollik va o'tirg'ich xulq-atvorni baholash bo'yicha ${i + 1}-savol.`;
+      }
+
+      return {
+        id: i + 1,
+        question: `${i + 1}. ${qText}`,
+        options: ['1.0 MET', '1.5 MET', '2.0 MET', '3.0 MET'],
+        correct: 1
+      };
+    });
   };
 
   const testQuestions = generate25TestQuestions();
@@ -103,22 +124,22 @@ export const DiagnosticsModule: React.FC<DiagnosticsModuleProps> = ({
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-100 dark:border-slate-700 pb-4">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 text-xs font-bold mb-2">
-              <ClipboardCheck className="w-3.5 h-3.5" /> 3 nuqtali kompleks diagnostika
+              <ClipboardCheck className="w-3.5 h-3.5" /> 3-point {t('tabDiagnostics').toLowerCase()}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 dark:text-white">
-              Diagnostika Moduli
+              {t('diagTitle')}
             </h1>
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
-              Kirish (Semestr boshi) → Oraliq (Semestr o'rtasi) → Yakuniy (Semestr oxiri) diagnostika instrumentlari
+              {t('diagSub')}
             </p>
           </div>
 
           {/* Assessment Point Switcher */}
           <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-900 p-1.5 rounded-2xl border border-gray-200 dark:border-slate-700">
             {[
-              { key: 'kirish', label: '1. Kirish' },
-              { key: 'oraliq', label: '2. Oraliq' },
-              { key: 'yakuniy', label: '3. Yakuniy' },
+              { key: 'kirish', label: lang === 'ru' ? '1. Входная' : lang === 'en' ? '1. Entry' : '1. Kirish' },
+              { key: 'oraliq', label: lang === 'ru' ? '2. Промежуточная' : lang === 'en' ? '2. Mid-term' : '2. Oraliq' },
+              { key: 'yakuniy', label: lang === 'ru' ? '3. Итоговая' : lang === 'en' ? '3. Final' : '3. Yakuniy' },
             ].map((pt) => (
               <button
                 key={pt.key}
@@ -138,11 +159,11 @@ export const DiagnosticsModule: React.FC<DiagnosticsModuleProps> = ({
         {/* 5 Instrument Tabs */}
         <div className="flex items-center gap-2 overflow-x-auto pb-2">
           {[
-            { id: 'test', label: '25-Topshiriqli Bilim Testi', icon: FileCheck2 },
-            { id: 'anketa', label: 'Anonim Anketa (4 qism)', icon: HelpCircle },
-            { id: 'kuzatuv', label: 'O\'qituvchi Kuzatuv Kartasi', icon: Eye },
-            { id: 'ekspert', label: 'Ekspert Baholash Varag\'i', icon: Award },
-            { id: 'esse', label: 'Refleksiv Esse', icon: PenTool },
+            { id: 'test', label: t('tabTest'), icon: FileCheck2 },
+            { id: 'anketa', label: t('tabAnketa'), icon: HelpCircle },
+            { id: 'kuzatuv', label: t('tabKuzatuv'), icon: Eye },
+            { id: 'ekspert', label: t('tabEkspert'), icon: Award },
+            { id: 'esse', label: t('tabEsse'), icon: PenTool },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeDiagTab === tab.id;

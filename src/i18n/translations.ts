@@ -93,7 +93,7 @@ export const translations = {
     solutionOption1Title: "Mashg'ulot ichidagi mikrofaollik pauzasi",
     solutionOption1Desc: "Darsning 40-daqiqasida 3-5 daqiqalik kognitiv yoki gigiyenik mashq bajarish.",
     solutionOption2Title: "Tanaffusdagi faol harakat",
-    solutionOption2Desc: "10 daqiqalik tanaffusda auditoriyadan chiqib, ochiq havoda 300-500 qadam yurish.",
+    solutionOption2Desc: "10 daqiqalik tanaffusda auditoriyadan chiqib, ochoq havoda 300-500 qadam yurish.",
     solutionOption3Title: "Binolar orasidagi yo'lni piyoda o'tkazish",
     solutionOption3Desc: "Kafedra va fakultet binolari o'rtasida liftsiz zinapoyadan harakatlanish.",
     solutionOption4Title: "Mustaqil ish davridagi '45+5' rejimi",
@@ -104,6 +104,7 @@ export const translations = {
     neutralizationRequired: "⚠️ Neftralizatsiya talab etiladi",
 
     // Cards Bank
+    cardsBadge: "60+ Kartochkadan iborat katalog",
     cardsTitle: "«Faollik kartochkalari» banki",
     cardsSubtitle: "Mashg'ulotlar va turmush tarziga moslashtirilgan mikrofaollik pauzalari katalogi",
     filterAllTypes: "Barcha pauza turlari",
@@ -112,11 +113,24 @@ export const translations = {
     filterProfessional: "Kasbiy-metodik (3-5 daq.)",
     filterSeated: "O'rindan turmasdan",
     filterMoving: "Auditoriyada harakatlanib",
+    searchPlaceholder: "Kartochka nomi, fan yoki metodik kalit so'z...",
+    btnDetails: "Batafsil kartochka",
+    cardEquipmentLabel: "Zarur joy va jihoz:",
+    cardDurationLabel: "Davomiyligi:",
+    cardAlgoLabel: "O'tkazish algoritmi (3–5 qadam):",
+    cardNoteLabel: "Metodik eslatma:",
+    cardHealthLabel: "Sog'liq cheklovi bo'lganlar uchun moslashtirilgan variant:",
 
     // LMS
     lmsTitle: "«Raqamli faollik madaniyati» moduli",
     lmsHoursInfo: "2 kredit (60 soat: 16 soat ma'ruza + 24 soat amaliy + 20 soat mustaqil ta'lim)",
     btnAddTopic: "Yangi Ma'ruza va Media Yuklash",
+    lmsTabLecture: "Video-Ma'ruza",
+    lmsTabPres: "Taqdimot",
+    lmsTabGallery: "Rasmlar & Media",
+    lmsTabTest: "O'z-o'zini tekshirish testi",
+    lmsTabAssignment: "Amaliy topshiriq",
+    lmsTabForum: "Muhokama forumi",
 
     // Diagnostics
     diagTitle: "Diagnostika Moduli",
@@ -132,10 +146,21 @@ export const translations = {
     assessSub: "Mutlaq jismoniy ko'rsatkichlar baholanmaydi! Baholanadigan narsa — monitoring muntazamligi, tahlil sifati va metodik ko'nikmalar.",
     layer1Title: "Birinchi Qatlam: Obyektiv ko'rsatkichlar (30% ulush)",
     layer2Title: "Ikkinchi Qatlam: 4 Pedagogik Mezon (70% ulush)",
+    crit1Title: "1. Motivatsion-qadriyatli",
+    crit1Desc: "Barqaror ehtiyoj, kasbiy mas'uliyatni anglash. (Anketa, suhbat)",
+    crit2Title: "2. Kognitiv-metodik",
+    crit2Desc: "Me'yorlar, o'tirg'ich xulq-atvor, pauzalar metodikasi bo'yicha bilim. (Test, keys)",
+    crit3Title: "3. Faoliyatli-monitoring",
+    crit3Desc: "Monitoring muntazamligi, pauza o'tkaza olish, rejani bajarish. (Kundalik, kuzatuv)",
+    crit4Title: "4. Refleksiv-korreksion",
+    crit4Desc: "Profilni tahlil qilish, sabab aniqlash, maqsad qo'yish. (Esse, shaxsiy reja)",
 
     // Gamification
     gamTitle: "Ijtimoiy Rag'bat va Guruh Chellenjlari",
     gamSub: "Moddiy emas, faqat ijtimoiy e'tirof! Musobaqalar guruhiy formatda o'tkaziladi.",
+    gamTab1: "«Guruh qadami» Musobaqasi",
+    gamTab2: "«Faol hafta» 5 qoidasi",
+    gamTab3: "Nishonlar va E'tirof",
 
     // Dashboards
     teacherDashTitle: "Mashg'ulotlar Rejasi va Kuzatuv Kartalari",
@@ -248,7 +273,7 @@ export const translations = {
     redZoneLegend: "Красные зоны = Разрыв активности (>60 мин сидения)",
     gapsProposalTitle: "Прикрепите вариант заполнения для каждого выявленного разрыва:",
     solutionOption1Title: "Микропауза активности во время занятия",
-    solutionOption1Desc: "Выполнение 3-5 минутной физкультпауз на 40-й минуте занятия.",
+    solutionOption1Desc: "Выполнение 3-5 минутной физкультпаузы на 40-й минуте занятия.",
     solutionOption2Title: "Активное движение на перемене",
     solutionOption2Desc: "Выход из аудитории на 10-минутной перемене, 300-500 шагов на свежем воздухе.",
     solutionOption3Title: "Пеший переход между корпусами",
@@ -261,6 +286,7 @@ export const translations = {
     neutralizationRequired: "⚠️ Требуется нейтрализация",
 
     // Cards Bank
+    cardsBadge: "Каталог из 60+ карточек",
     cardsTitle: "Банк карточек активности",
     cardsSubtitle: "Каталог микропауз активности, адаптированных к занятиям",
     filterAllTypes: "Все типы пауз",
@@ -269,11 +295,24 @@ export const translations = {
     filterProfessional: "Профессионально-методические (3-5 мин.)",
     filterSeated: "Не вставая с места",
     filterMoving: "С перемещением по аудитории",
+    searchPlaceholder: "Поиск названия карточки, предмета или ключевого слова...",
+    btnDetails: "Подробности карточки",
+    cardEquipmentLabel: "Место и инвентарь:",
+    cardDurationLabel: "Длительность:",
+    cardAlgoLabel: "Алгоритм выполнения (3–5 шагов):",
+    cardNoteLabel: "Методическая заметка:",
+    cardHealthLabel: "Вариант для лиц с ограничениями здоровья:",
 
     // LMS
     lmsTitle: "Модуль «Культура цифровой активности»",
     lmsHoursInfo: "2 кредита (60 часов: 16 ч лекции + 24 ч практика + 20 ч самост. работа)",
     btnAddTopic: "Загрузить новую лекцию и медиа",
+    lmsTabLecture: "Видео-Лекция",
+    lmsTabPres: "Презентация",
+    lmsTabGallery: "Картинки и Медиа",
+    lmsTabTest: "Тест для самопроверки",
+    lmsTabAssignment: "Практическое задание",
+    lmsTabForum: "Форум обсуждений",
 
     // Diagnostics
     diagTitle: "Модуль Диагностики",
@@ -289,10 +328,21 @@ export const translations = {
     assessSub: "Абсолютные шаги не оцениваются! Оценивается регулярность мониторинга, качество анализа и методические навыки.",
     layer1Title: "Первый слой: Объективные показатели (30% доля)",
     layer2Title: "Второй слой: 4 педагогических критерия (70% доля)",
+    crit1Title: "1. Мотивационно-ценностный",
+    crit1Desc: "Устойчивая потребность, осознание профессиональной ответственности. (Анкета, беседа)",
+    crit2Title: "2. Когнитивно-методический",
+    crit2Desc: "Знание норм, малоподвижного поведения, методики пауз. (Тест, кейсы)",
+    crit3Title: "3. Деятельностно-мониторинговый",
+    crit3Desc: "Регулярность мониторинга, умение проводить паузы. (Дневник, наблюдение)",
+    crit4Title: "4. Рефлексивно-коррекционный",
+    crit4Desc: "Анализ профиля, выявление причин, постановка целей. (Эссе, личный план)",
 
     // Gamification
     gamTitle: "Социальные Стимулы и Групповые Челленджи",
     gamSub: "Не материальное, а только социальное признание! Соревнования проводятся в групповом формате.",
+    gamTab1: "Челлендж «Шаг группы»",
+    gamTab2: "5 правил «Активной недели»",
+    gamTab3: "Бейджи и Признание",
 
     // Dashboards
     teacherDashTitle: "План Занятий и Карты Наблюдения",
@@ -418,6 +468,7 @@ export const translations = {
     neutralizationRequired: "⚠️ Neutralization Required",
 
     // Cards Bank
+    cardsBadge: "Catalog of 60+ Cards",
     cardsTitle: "Activity Cards Bank",
     cardsSubtitle: "Catalog of classroom-adapted microactivity movement pauses",
     filterAllTypes: "All Pause Types",
@@ -426,11 +477,24 @@ export const translations = {
     filterProfessional: "Professional-Methodological (3-5 mins)",
     filterSeated: "Without Leaving Seat",
     filterMoving: "Moving in Classroom",
+    searchPlaceholder: "Search card title, subject or key word...",
+    btnDetails: "Card Details",
+    cardEquipmentLabel: "Location & Equipment:",
+    cardDurationLabel: "Duration:",
+    cardAlgoLabel: "Execution Algorithm (3–5 steps):",
+    cardNoteLabel: "Methodological Note:",
+    cardHealthLabel: "Adapted Variant for Medical Limits:",
 
     // LMS
     lmsTitle: "Digital Activity Culture Module",
     lmsHoursInfo: "2 credits (60 hours: 16h lecture + 24h practical + 20h self-study)",
     btnAddTopic: "Upload New Lecture & Media",
+    lmsTabLecture: "Video-Lecture",
+    lmsTabPres: "Presentation",
+    lmsTabGallery: "Pictures & Media",
+    lmsTabTest: "Self-Check Quiz",
+    lmsTabAssignment: "Practical Task",
+    lmsTabForum: "Discussion Forum",
 
     // Diagnostics
     diagTitle: "Diagnostics Module",
@@ -446,10 +510,21 @@ export const translations = {
     assessSub: "Absolute steps are not graded! Monitoring regularity, analysis quality, and methodological skills are evaluated.",
     layer1Title: "First Layer: Objective Indicators (30% weight)",
     layer2Title: "Second Layer: 4 Pedagogical Criteria (70% weight)",
+    crit1Title: "1. Motivational-Value",
+    crit1Desc: "Sustainable need, awareness of professional responsibility. (Questionnaire, interview)",
+    crit2Title: "2. Cognitive-Methodological",
+    crit2Desc: "Knowledge of norms, sedentary behavior, pause methodology. (Test, cases)",
+    crit3Title: "3. Activity-Monitoring",
+    crit3Desc: "Monitoring regularity, ability to run pauses. (Diary, observation)",
+    crit4Title: "4. Reflexive-Correctional",
+    crit4Desc: "Profile analysis, identifying causes, setting goals. (Essay, personal plan)",
 
     // Gamification
     gamTitle: "Social Incentives & Group Challenges",
     gamSub: "Not monetary, strictly social recognition! Competitions are conducted in a group format.",
+    gamTab1: "'Group Step' Challenge",
+    gamTab2: "'Active Week' 5 Rules",
+    gamTab3: "Badges & Social Recognition",
 
     // Dashboards
     teacherDashTitle: "Lesson Plan & Observation Cards",
