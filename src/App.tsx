@@ -282,8 +282,13 @@ export const App: React.FC = () => {
       {/* Footer */}
       <footer className="border-t border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-6 mt-12 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-gray-500 dark:text-gray-400">
-          <div>
-            © 2026 <strong>{t('appName')}</strong>. {t('appSubtitle')}.
+          <div className="space-y-1">
+            <div>
+              © 2026 <strong>{t('appName')}</strong> — <span className="font-semibold text-emerald-600 dark:text-emerald-400">{t('appSubtitle')}</span>.
+            </div>
+            <div className="text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+              {t('authorNotice')}
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <button onClick={() => setGlossaryOpen(true)} className="hover:underline">{t('glossary')}</button>

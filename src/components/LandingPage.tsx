@@ -12,7 +12,8 @@ import {
   Zap, 
   Brain, 
   Heart,
-  Users
+  Users,
+  GraduationCap
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -48,6 +49,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartDemo, onOpenGlo
               <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl">
                 {t('heroDesc')}
               </p>
+
+              {/* Author Dissertation Card */}
+              <div className="p-4 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800/60 flex items-start gap-3.5 max-w-2xl text-xs sm:text-sm">
+                <div className="p-2.5 rounded-xl bg-indigo-600 text-white shrink-0 shadow-md">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <div className="space-y-0.5">
+                  <div className="font-bold text-indigo-900 dark:text-indigo-200">
+                    {t('authorTitle')}
+                  </div>
+                  <div className="text-gray-700 dark:text-gray-300 leading-snug font-medium">
+                    {t('authorNotice')}
+                  </div>
+                </div>
+              </div>
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-4 pt-2">

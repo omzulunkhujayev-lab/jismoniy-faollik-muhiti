@@ -4,7 +4,9 @@ export const translations = {
   uz: {
     // Brand & Nav
     appName: "Raqamli Faollik Muhiti",
-    appSubtitle: "Pedagogik Platforma",
+    appSubtitle: "PhD dissertatsiyasi",
+    authorTitle: "Loyiha muallifi",
+    authorNotice: "Zulunxo'jayev Marufjon Ma'murjon o'g'lining PhD dissertatsiya loyihasi doirasida",
     glossary: "Glossariy",
     roleLabel: "Rol",
     roleStudent: "Talaba",
@@ -186,7 +188,9 @@ export const translations = {
   ru: {
     // Brand & Nav
     appName: "Цифровая Двигательная Среда",
-    appSubtitle: "Педагогическая Платформа",
+    appSubtitle: "PhD диссертация",
+    authorTitle: "Автор проекта",
+    authorNotice: "В рамках PhD диссертационного проекта Зулунходжаева Маруфжона Мамуржон угли",
     glossary: "Глоссарий",
     roleLabel: "Роль",
     roleStudent: "Студент",
@@ -368,7 +372,9 @@ export const translations = {
   en: {
     // Brand & Nav
     appName: "Digital Physical Activity Environment",
-    appSubtitle: "Pedagogical Platform",
+    appSubtitle: "PhD Dissertation",
+    authorTitle: "Project author",
+    authorNotice: "Within the PhD dissertation project of Zulunkhojayev Marufjon Mamurjon ugli",
     glossary: "Glossary",
     roleLabel: "Role",
     roleStudent: "Student",
