@@ -1,4 +1,17 @@
-export type UserRole = 'talaba' | 'oqituvchi' | 'tyutor' | 'kafedra';
+export type UserRole = 'talaba' | 'oqituvchi' | 'tyutor' | 'kafedra' | 'admin';
+
+export interface SupervisorAccount {
+  id: string;
+  fio: string;
+  role: UserRole;
+  login: string;
+  password: string;
+  lavozim?: string;
+  muassasa?: string;
+  guruh_id?: string;
+  status: 'faol' | 'nofaol';
+  yaratilgan_sana: string;
+}
 
 export interface User {
   id: string;

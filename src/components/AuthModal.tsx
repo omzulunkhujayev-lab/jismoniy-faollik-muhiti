@@ -113,8 +113,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {currentUser?.isLoggedIn && (
           <div className="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className={`p-2.5 rounded-xl text-white font-extrabold ${currentUser.role === 'talaba' ? 'bg-emerald-600' : 'bg-indigo-600'}`}>
-                {currentUser.role === 'talaba' ? <GraduationCap className="w-5 h-5" /> : <UserCheck className="w-5 h-5" />}
+              <div className={`p-2.5 rounded-xl text-white font-extrabold ${
+                currentUser.role === 'admin' ? 'bg-amber-500 shadow-md shadow-amber-500/30' :
+                currentUser.role === 'talaba' ? 'bg-emerald-600' : 'bg-indigo-600'
+              }`}>
+                {currentUser.role === 'admin' ? (
+                  <ShieldCheck className="w-5 h-5" />
+                ) : currentUser.role === 'talaba' ? (
+                  <GraduationCap className="w-5 h-5" />
+                ) : (
+                  <UserCheck className="w-5 h-5" />
+                )}
               </div>
               <div>
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-500 dark:text-slate-400 block">
@@ -124,7 +133,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   {currentUser.fio}
                 </span>
                 <span className="text-xs text-slate-600 dark:text-slate-300 block font-semibold">
-                  {currentUser.role === 'talaba' 
+                  {currentUser.role === 'admin'
+                    ? "👑 Super Admin (Loyiha Muallifi)"
+                    : currentUser.role === 'talaba' 
                     ? `🎓 ${t('roleStudent')} (${currentUser.guruh_id || '301-guruh'})`
                     : currentUser.role === 'oqituvchi'
                     ? `👨‍🏫 ${t('roleTeacher')}`
@@ -302,7 +313,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <span className="text-[11px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                 {t('authQuickCredentials')}
               </span>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {SUPERVISOR_CREDENTIALS.map((cred) => (
                   <button
                     key={cred.role}

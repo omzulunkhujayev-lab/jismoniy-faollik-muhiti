@@ -20,6 +20,7 @@ import {
   Menu, 
   X, 
   ShieldAlert, 
+  ShieldCheck,
   Home, 
   Globe,
   LogIn,
@@ -58,7 +59,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleNavClick = (tabId: string) => {
-    const isSupervisorTab = tabId === 'teacher' || tabId === 'tutor' || tabId === 'department';
+    const isSupervisorTab = tabId === 'teacher' || tabId === 'tutor' || tabId === 'department' || tabId === 'admin_panel';
     if (isSupervisorTab && currentUser?.role === 'talaba') {
       onOpenAuth('nazoratchi');
       return;
@@ -73,7 +74,23 @@ export const Navbar: React.FC<NavbarProps> = ({
       { id: 'landing', label: t('tabHome'), icon: Home },
     ];
 
-    if (currentRole === 'talaba') {
+    if (currentRole === 'admin') {
+      return [
+        ...commonTabs,
+        { id: 'admin_panel', label: lang === 'ru' ? 'Управление кураторами' : lang === 'en' ? 'Supervisors Admin' : "Nazoratchilar boshqaruvi", icon: ShieldCheck },
+        { id: 'diary', label: t('tabDiary'), icon: Calendar },
+        { id: 'teacher', label: t('tabTeacher'), icon: UserCheck },
+        { id: 'tutor', label: t('tabTutor'), icon: BarChart3 },
+        { id: 'department', label: t('tabDepartment'), icon: BarChart3 },
+        { id: 'weekly', label: t('tabWeekly'), icon: TrendingUp },
+        { id: 'gaps', label: t('tabGaps'), icon: Split },
+        { id: 'cards', label: t('tabCards'), icon: BookMarked },
+        { id: 'lms', label: t('tabLms'), icon: GraduationCap },
+        { id: 'diagnostics', label: t('tabDiagnostics'), icon: ClipboardCheck },
+        { id: 'levels', label: t('tabLevels'), icon: Award },
+        { id: 'gamification', label: t('tabGamification'), icon: Trophy }
+      ];
+    } else if (currentRole === 'talaba') {
       return [
         ...commonTabs,
         { id: 'diary', label: t('tabDiary'), icon: Calendar },
@@ -184,9 +201,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                   title={t('authSwitchUser')}
                 >
                   <div className={`p-1.5 rounded-xl text-white font-extrabold ${
+                    currentUser.role === 'admin' ? 'bg-amber-500 shadow-md shadow-amber-500/30' :
                     currentUser.role === 'talaba' ? 'bg-emerald-600' : 'bg-indigo-600'
                   }`}>
-                    {currentUser.role === 'talaba' ? (
+                    {currentUser.role === 'admin' ? (
+                      <ShieldCheck className="w-3.5 h-3.5" />
+                    ) : currentUser.role === 'talaba' ? (
                       <GraduationCap className="w-3.5 h-3.5" />
                     ) : (
                       <Lock className="w-3.5 h-3.5" />
@@ -197,7 +217,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                       {currentUser.fio}
                     </div>
                     <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
-                      {currentUser.role === 'talaba' 
+                      {currentUser.role === 'admin'
+                        ? '👑 Super Admin'
+                        : currentUser.role === 'talaba' 
                         ? `${t('roleStudent')} (${currentUser.guruh_id?.split(' ')[0] || '301'})`
                         : currentUser.role === 'oqituvchi'
                         ? t('roleTeacher')
@@ -305,16 +327,25 @@ export const Navbar: React.FC<NavbarProps> = ({
             {currentUser?.isLoggedIn ? (
               <div className="flex items-center gap-2.5 overflow-hidden">
                 <div className={`p-2 rounded-xl text-white font-extrabold shrink-0 ${
+                  currentUser.role === 'admin' ? 'bg-amber-500 shadow-md shadow-amber-500/30' :
                   currentUser.role === 'talaba' ? 'bg-emerald-600' : 'bg-indigo-600'
                 }`}>
-                  {currentUser.role === 'talaba' ? <GraduationCap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                  {currentUser.role === 'admin' ? (
+                    <ShieldCheck className="w-4 h-4" />
+                  ) : currentUser.role === 'talaba' ? (
+                    <GraduationCap className="w-4 h-4" />
+                  ) : (
+                    <Lock className="w-4 h-4" />
+                  )}
                 </div>
                 <div className="truncate">
                   <div className="text-xs font-black text-slate-900 dark:text-white truncate">
                     {currentUser.fio}
                   </div>
                   <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold">
-                    {currentUser.role === 'talaba' 
+                    {currentUser.role === 'admin'
+                      ? '👑 Super Admin'
+                      : currentUser.role === 'talaba' 
                       ? `${t('roleStudent')} (${currentUser.guruh_id?.split(' ')[0] || '301'})`
                       : currentUser.role === 'oqituvchi'
                       ? t('roleTeacher')

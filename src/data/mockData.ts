@@ -1,4 +1,4 @@
-import { User, Group, DailyEntry, WeeklyGoal, Card, CourseTopic, ScheduleItem, ActivityGap, Badge, Challenge, Assessment, ObservationCard } from '../types';
+import { User, Group, DailyEntry, WeeklyGoal, Card, CourseTopic, ScheduleItem, ActivityGap, Badge, Challenge, Assessment, ObservationCard, SupervisorAccount } from '../types';
 
 export const mockUsers: Record<string, User> = {
   talaba: {
@@ -51,14 +51,85 @@ export const mockUsers: Record<string, User> = {
   }
 };
 
+export const initialSupervisors: SupervisorAccount[] = [
+  {
+    id: 'sup_admin',
+    fio: "Zulunxo'jayev Marufjon Ma'murjon o'g'li",
+    role: 'admin',
+    login: 'admin',
+    password: 'admin777',
+    lavozim: 'Loyiha muallifi va Bosh Administrator (PhD tadqiqotchi)',
+    muassasa: 'TDPU / Raqamli faollik muhiti loyihasi',
+    guruh_id: 'Barcha guruhlar',
+    status: 'faol',
+    yaratilgan_sana: '2026-09-01'
+  },
+  {
+    id: 'sup_001',
+    fio: 'Prof. Dilnoza Raximova',
+    role: 'oqituvchi',
+    login: 'oqituvchi',
+    password: 'teacher123',
+    lavozim: 'Pedagogika kafedrasi professori',
+    muassasa: 'TDPU Pedagogika kafedrasi',
+    guruh_id: '301-Pedagogika (Tajriba)',
+    status: 'faol',
+    yaratilgan_sana: '2026-09-01'
+  },
+  {
+    id: 'sup_002',
+    fio: 'Sardor Ergashev',
+    role: 'tyutor',
+    login: 'tyutor',
+    password: 'tutor123',
+    lavozim: '3-bosqich tyutori',
+    muassasa: 'Pedagogika fakulteti',
+    guruh_id: '301-Pedagogika (Tajriba)',
+    status: 'faol',
+    yaratilgan_sana: '2026-09-01'
+  },
+  {
+    id: 'sup_003',
+    fio: 'Prof. Botir Nodirov',
+    role: 'kafedra',
+    login: 'kafedra',
+    password: 'admin123',
+    lavozim: 'Pedagogika kafedrasi mudiri',
+    muassasa: 'Pedagogika va jismoniy madaniyat kafedrasi',
+    guruh_id: '301-Pedagogika, 302-Pedagogika',
+    status: 'faol',
+    yaratilgan_sana: '2026-09-01'
+  }
+];
+
 export const SUPERVISOR_CREDENTIALS = [
+  {
+    role: 'admin' as const,
+    login: 'admin',
+    altLogin: 'marufjon',
+    password: 'admin777',
+    altPassword: 'admin123',
+    title: "👑 Loyiha Muallifi / Bosh Admin",
+    user: {
+      id: 'sup_admin',
+      role: 'admin' as const,
+      fio: "Zulunxo'jayev Marufjon Ma'murjon o'g'li",
+      muassasa: 'TDPU / Raqamli faollik muhiti loyihasi',
+      yonalish: 'PhD dissertatsiya tadqiqot loyihasi',
+      kurs: 0,
+      guruh_id: 'Barcha guruhlar',
+      jins: 'erkak' as const,
+      yashash_sharoiti: 'oila_bilan' as const,
+      tibbiy_guruh: 'asosiy' as const
+    }
+  },
   {
     role: 'oqituvchi' as const,
     login: 'oqituvchi',
     altLogin: 'teacher',
     password: 'teacher123',
     altPassword: 'oqituvchi123',
-    title: "O'qituvchi",
+    title: "👨‍🏫 O'qituvchi",
     user: mockUsers.oqituvchi
   },
   {
@@ -67,16 +138,16 @@ export const SUPERVISOR_CREDENTIALS = [
     altLogin: 'tutor',
     password: 'tutor123',
     altPassword: 'tyutor123',
-    title: "Guruh Tyutori",
+    title: "🧑‍💼 Guruh Tyutori",
     user: mockUsers.tyutor
   },
   {
     role: 'kafedra' as const,
     login: 'kafedra',
-    altLogin: 'admin',
+    altLogin: 'mudir',
     password: 'admin123',
     altPassword: 'kafedra123',
-    title: "Kafedra Mudiri / Administrator",
+    title: "🏛️ Kafedra Mudiri",
     user: mockUsers.kafedra
   }
 ];

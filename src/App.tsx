@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserRole, DailyEntry, WeeklyGoal, Card, CourseTopic, ObservationCard, AuthenticatedUser } from './types';
+import { UserRole, DailyEntry, WeeklyGoal, Card, CourseTopic, ObservationCard, AuthenticatedUser, SupervisorAccount } from './types';
 import { useLanguage } from './context/LanguageContext';
 import { 
   mockCards, 
@@ -12,7 +12,8 @@ import {
   mockChallenge, 
   mockAssessments, 
   mockObservationCards,
-  SUPERVISOR_CREDENTIALS
+  SUPERVISOR_CREDENTIALS,
+  initialSupervisors
 } from './data/mockData';
 
 import { Navbar } from './components/Navbar';
@@ -29,6 +30,7 @@ import { AssessmentLevels } from './components/AssessmentLevels';
 import { GamificationModule } from './components/GamificationModule';
 import { TeacherDashboard } from './components/TeacherDashboard';
 import { TutorDepartmentDashboard } from './components/TutorDepartmentDashboard';
+import { AdminSupervisorManagement } from './components/AdminSupervisorManagement';
 import { Wifi, WifiOff } from 'lucide-react';
 import { initScreenTimeTracker } from './services/sensorService';
 
@@ -145,6 +147,39 @@ export const App: React.FC = () => {
     localStorage.setItem('rfm_observations', JSON.stringify(observationCards));
   }, [observationCards]);
 
+  // Dynamic Supervisors Management (Super Admin)
+  const [supervisors, setSupervisors] = useState<SupervisorAccount[]>(() => {
+    const saved = localStorage.getItem('rfm_supervisors');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      } catch (e) {}
+    }
+    return initialSupervisors;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('rfm_supervisors', JSON.stringify(supervisors));
+  }, [supervisors]);
+
+  const handleAddSupervisor = (newSup: Omit<SupervisorAccount, 'id' | 'yaratilgan_sana'>) => {
+    const created: SupervisorAccount = {
+      ...newSup,
+      id: `sup_${Date.now()}`,
+      yaratilgan_sana: new Date().toISOString().split('T')[0]
+    };
+    setSupervisors(prev => [created, ...prev]);
+  };
+
+  const handleUpdateSupervisor = (updated: SupervisorAccount) => {
+    setSupervisors(prev => prev.map(s => s.id === updated.id ? updated : s));
+  };
+
+  const handleDeleteSupervisor = (id: string) => {
+    setSupervisors(prev => prev.filter(s => s.id !== id));
+  };
+
   // Authentication Handlers
   const handleLoginStudent = (fullName: string, group: string) => {
     const user: AuthenticatedUser = {
@@ -164,9 +199,47 @@ export const App: React.FC = () => {
   };
 
   const handleLoginSupervisor = (login: string, pass: string): { success: boolean; error?: string } => {
-    const trimmedLogin = login.toLowerCase();
+    const trimmedLogin = login.trim().toLowerCase();
     const trimmedPass = pass.trim();
 
+    // 1. Dynamic supervisor accounts check (includes created/edited accounts)
+    const dynamicMatch = supervisors.find(s => 
+      s.login.trim().toLowerCase() === trimmedLogin && s.password === trimmedPass
+    );
+
+    if (dynamicMatch) {
+      if (dynamicMatch.status === 'nofaol') {
+        return { 
+          success: false, 
+          error: lang === 'ru' 
+            ? 'Данная учетная запись неактивна (заблокирована администратором).' 
+            : lang === 'en' 
+            ? 'This account is inactive (blocked by administrator).' 
+            : 'Ushbu hisob nofaol holatda (admin tomonidan bloklangan).' 
+        };
+      }
+
+      const user: AuthenticatedUser = {
+        id: dynamicMatch.id,
+        role: dynamicMatch.role,
+        fio: dynamicMatch.fio,
+        muassasa: dynamicMatch.muassasa,
+        guruh_id: dynamicMatch.guruh_id,
+        isLoggedIn: true,
+        loginTime: new Date().toISOString()
+      };
+      setCurrentUser(user);
+      setCurrentRole(dynamicMatch.role);
+      localStorage.setItem('rfm_auth_user', JSON.stringify(user));
+
+      if (dynamicMatch.role === 'admin') setActiveTab('admin_panel');
+      else if (dynamicMatch.role === 'oqituvchi') setActiveTab('teacher');
+      else if (dynamicMatch.role === 'tyutor') setActiveTab('tutor');
+      else setActiveTab('department');
+      return { success: true };
+    }
+
+    // 2. Fallback to hardcoded mock credentials
     const match = SUPERVISOR_CREDENTIALS.find(c => 
       (c.login.toLowerCase() === trimmedLogin || c.altLogin.toLowerCase() === trimmedLogin) &&
       (c.password === trimmedPass || c.altPassword === trimmedPass)
@@ -188,7 +261,8 @@ export const App: React.FC = () => {
       setCurrentRole(match.role);
       localStorage.setItem('rfm_auth_user', JSON.stringify(user));
 
-      if (match.role === 'oqituvchi') setActiveTab('teacher');
+      if (match.role === 'admin') setActiveTab('admin_panel');
+      else if (match.role === 'oqituvchi') setActiveTab('teacher');
       else if (match.role === 'tyutor') setActiveTab('tutor');
       else setActiveTab('department');
       return { success: true };
@@ -227,7 +301,9 @@ export const App: React.FC = () => {
         setAuthInitialTab('talaba');
         setAuthModalOpen(true);
       } else {
-        setCurrentRole('talaba');
+        if (currentUser.role !== 'admin') {
+          setCurrentRole('talaba');
+        }
         setActiveTab('diary');
       }
     } else {
@@ -236,7 +312,9 @@ export const App: React.FC = () => {
         setAuthInitialTab('nazoratchi');
         setAuthModalOpen(true);
       } else {
-        setCurrentRole(role);
+        if (currentUser.role !== 'admin') {
+          setCurrentRole(role);
+        }
         setActiveTab(targetTab);
       }
     }
@@ -397,6 +475,16 @@ export const App: React.FC = () => {
           <GamificationModule
             badges={mockBadges}
             challenge={mockChallenge}
+          />
+        )}
+
+        {activeTab === 'admin_panel' && (
+          <AdminSupervisorManagement
+            supervisors={supervisors}
+            onAddSupervisor={handleAddSupervisor}
+            onUpdateSupervisor={handleUpdateSupervisor}
+            onDeleteSupervisor={handleDeleteSupervisor}
+            onNavigateTab={(tab) => setActiveTab(tab)}
           />
         )}
 
