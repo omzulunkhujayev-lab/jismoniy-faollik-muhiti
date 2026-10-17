@@ -127,16 +127,64 @@ export const ActivityGapAnalysis: React.FC<ActivityGapAnalysisProps> = ({ schedu
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 space-y-4">
-              <div className="font-bold text-rose-700 dark:text-rose-400 text-sm">
-                {lang === 'ru' ? 'ИСХОДНОЕ СОСТОЯНИЕ (ДО)' : lang === 'en' ? 'BEFORE INTERVENTION' : 'OLDINGI HOLAT'}
+            <div className="p-6 rounded-3xl bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-300 dark:border-rose-800 space-y-4 shadow-sm">
+              <div className="flex items-center justify-between border-b border-rose-200 dark:border-rose-800 pb-3">
+                <div className="font-extrabold text-rose-700 dark:text-rose-300 text-sm sm:text-base flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-rose-500" />
+                  {lang === 'ru' ? 'ИСХОДНОЕ СОСТОЯНИЕ (ДО ВНЕДРЕНИЯ)' : lang === 'en' ? 'BASELINE STATE (BEFORE INTERVENTION)' : 'DASTLABKI HOLAT (ARALASHUVGACHA)'}
+                </div>
+                <span className="px-2.5 py-1 rounded-full text-xs font-extrabold bg-rose-200 dark:bg-rose-900 text-rose-800 dark:text-rose-200">
+                  {lang === 'ru' ? 'Дефицит' : lang === 'en' ? 'Deficit' : 'Gipodinamiya'}
+                </span>
               </div>
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium">
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Непрерывное сидение:' : lang === 'en' ? 'Continuous sitting:' : 'Uzluksiz o\'tirish:'}</span>
+                  <strong className="text-rose-600 dark:text-rose-400 font-extrabold">140–180 daq</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Микропаузы в аудитории:' : lang === 'en' ? 'Classroom micro-pauses:' : 'Auditoriyada mikropauzalar:'}</span>
+                  <strong className="text-rose-600 dark:text-rose-400 font-extrabold">0 ta / kun</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Среднесуточные шаги:' : lang === 'en' ? 'Daily steps average:' : 'O\'rtacha kunlik qadam:'}</span>
+                  <strong className="text-rose-600 dark:text-rose-400 font-extrabold">4 200 qadam</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Утомляемость на 3-й паре:' : lang === 'en' ? 'Fatigue on 3rd pair:' : '3-juftlikdagi charchoq:'}</span>
+                  <strong className="text-rose-600 dark:text-rose-400 font-extrabold">Yuqori (82%)</strong>
+                </li>
+              </ul>
             </div>
 
-            <div className="p-6 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 space-y-4">
-              <div className="font-bold text-emerald-700 dark:text-emerald-400 text-sm">
-                {lang === 'ru' ? 'ТЕКУЩЕЕ СОСТОЯНИЕ (ПОСЛЕ)' : lang === 'en' ? 'AFTER INTERVENTION' : 'HOZIRGI HOLAT'}
+            <div className="p-6 rounded-3xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-300 dark:border-emerald-800 space-y-4 shadow-sm">
+              <div className="flex items-center justify-between border-b border-emerald-200 dark:border-emerald-800 pb-3">
+                <div className="font-extrabold text-emerald-700 dark:text-emerald-300 text-sm sm:text-base flex items-center gap-2">
+                  <span className="w-3 h-3 rounded-full bg-emerald-500" />
+                  {lang === 'ru' ? 'ТЕКУЩЕЕ СОСТОЯНИЕ (ПОСЛЕ ВНЕДРЕНИЯ)' : lang === 'en' ? 'CURRENT STATE (AFTER INTERVENTION)' : 'HOZIRGI NATIJA (RAQAMLI MUHIT BILAN)'}
+                </div>
+                <span className="px-2.5 py-1 rounded-full text-xs font-extrabold bg-emerald-200 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200">
+                  {lang === 'ru' ? 'Норма' : lang === 'en' ? 'Optimal' : 'Me\'yor'}
+                </span>
               </div>
+              <ul className="space-y-2.5 text-xs sm:text-sm text-slate-800 dark:text-slate-200 font-medium">
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Непрерывное сидение:' : lang === 'en' ? 'Continuous sitting:' : 'Uzluksiz o\'tirish:'}</span>
+                  <strong className="text-emerald-600 dark:text-emerald-400 font-extrabold">&le; 45–50 daq</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Микропаузы в аудитории:' : lang === 'en' ? 'Classroom micro-pauses:' : 'Auditoriyada mikropauzalar:'}</span>
+                  <strong className="text-emerald-600 dark:text-emerald-400 font-extrabold">3–4 ta / kun</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Среднесуточные шаги:' : lang === 'en' ? 'Daily steps average:' : 'O\'rtacha kunlik qadam:'}</span>
+                  <strong className="text-emerald-600 dark:text-emerald-400 font-extrabold">8 950 qadam</strong>
+                </li>
+                <li className="flex items-center justify-between">
+                  <span>{lang === 'ru' ? 'Когнитивная концентрация:' : lang === 'en' ? 'Cognitive concentration:' : 'Kognitiv faollik va diqqat:'}</span>
+                  <strong className="text-emerald-600 dark:text-emerald-400 font-extrabold">A'lo (+34%)</strong>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

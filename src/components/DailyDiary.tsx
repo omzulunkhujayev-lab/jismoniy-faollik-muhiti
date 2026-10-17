@@ -111,94 +111,194 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
         {/* Grid for Sliders & Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-          {/* 1. Qadamlar soni */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+          {/* 1. Qadamlar soni - Dual input with quick preset buttons */}
+          <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <Footprints className="w-4 h-4 text-emerald-500" /> {t('fieldSteps')}
               </span>
-              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${qadam >= 8000 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300'}`}>
-                {qadam.toLocaleString()}
-              </span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max="40000"
+                  value={qadam}
+                  onChange={(e) => setQadam(Math.max(0, Number(e.target.value)))}
+                  className="w-24 px-2 py-1 text-right text-sm font-extrabold rounded-xl bg-white dark:bg-slate-800 border-2 border-emerald-500/50 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                <span className={`text-xs font-extrabold px-2.5 py-1 rounded-xl ${qadam >= 8000 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'}`}>
+                  {Math.round((qadam / 8000) * 100)}%
+                </span>
+              </div>
             </div>
+
             <input
               type="range"
               min="1000"
               max="20000"
-              step="250"
-              value={qadam}
+              step="100"
+              value={Math.min(20000, qadam)}
               onChange={(e) => setQadam(Number(e.target.value))}
-              className="w-full accent-emerald-600 cursor-pointer"
+              className="w-full accent-emerald-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
             />
+
+            {/* Quick Presets */}
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {[
+                { label: '+500', val: 500, type: 'add' },
+                { label: '+1 000', val: 1000, type: 'add' },
+                { label: '8 000 (Norma)', val: 8000, type: 'set' },
+                { label: '10 000 (Faol)', val: 10000, type: 'set' }
+              ].map((preset, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    if (preset.type === 'add') setQadam(prev => prev + preset.val);
+                    else setQadam(preset.val);
+                  }}
+                  className="px-2.5 py-1 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 text-slate-700 dark:text-slate-300 transition shadow-xs"
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* 2. Faol daqiqalar */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+          {/* 2. Faol daqiqalar - Dual input with quick buttons */}
+          <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-teal-500" /> {t('fieldActiveMins')}
               </span>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300">
-                {faolDaqiqa} daqiqa
-              </span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max="300"
+                  value={faolDaqiqa}
+                  onChange={(e) => setFaolDaqiqa(Math.max(0, Number(e.target.value)))}
+                  className="w-20 px-2 py-1 text-right text-sm font-extrabold rounded-xl bg-white dark:bg-slate-800 border-2 border-teal-500/50 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-teal-500"
+                />
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                  {lang === 'ru' ? 'мин' : lang === 'en' ? 'min' : 'daq'}
+                </span>
+              </div>
             </div>
+
             <input
               type="range"
               min="0"
               max="120"
               step="5"
-              value={faolDaqiqa}
+              value={Math.min(120, faolDaqiqa)}
               onChange={(e) => setFaolDaqiqa(Number(e.target.value))}
-              className="w-full accent-teal-600 cursor-pointer"
+              className="w-full accent-teal-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
             />
+
+            {/* Quick Presets */}
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {[
+                { label: '+10 daq', val: 10, type: 'add' },
+                { label: '+20 daq', val: 20, type: 'add' },
+                { label: '30 daq (Norma)', val: 30, type: 'set' },
+                { label: '45 daq', val: 45, type: 'set' }
+              ].map((preset, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    if (preset.type === 'add') setFaolDaqiqa(prev => prev + preset.val);
+                    else setFaolDaqiqa(preset.val);
+                  }}
+                  className="px-2.5 py-1 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 text-slate-700 dark:text-slate-300 transition shadow-xs"
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* 3. Eng uzun uzluksiz o'tirish */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+          <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <AlertTriangle className={`w-4 h-4 ${engUzunOtirish > 60 ? 'text-rose-500' : 'text-emerald-500'}`} /> {t('fieldMaxSitting')}
               </span>
-              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${engUzunOtirish < 60 ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'}`}>
-                {engUzunOtirish} daqiqa
-              </span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="0"
+                  max="300"
+                  value={engUzunOtirish}
+                  onChange={(e) => setEngUzunOtirish(Math.max(0, Number(e.target.value)))}
+                  className="w-20 px-2 py-1 text-right text-sm font-extrabold rounded-xl bg-white dark:bg-slate-800 border-2 border-rose-500/50 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-rose-500"
+                />
+                <span className={`text-xs font-extrabold px-2.5 py-1 rounded-xl ${engUzunOtirish <= 60 ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-800 dark:bg-rose-950 dark:text-rose-300'}`}>
+                  {engUzunOtirish <= 60 ? (lang === 'ru' ? 'Безопасно' : lang === 'en' ? 'Safe' : 'Xavfsiz') : (lang === 'ru' ? 'Разрыв!' : lang === 'en' ? 'Gap!' : 'Uzilish!')}
+                </span>
+              </div>
             </div>
+
             <input
               type="range"
               min="15"
               max="180"
               step="5"
-              value={engUzunOtirish}
+              value={Math.min(180, engUzunOtirish)}
               onChange={(e) => setEngUzunOtirish(Number(e.target.value))}
-              className="w-full accent-rose-500 cursor-pointer"
+              className="w-full accent-rose-500 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
             />
+
+            {/* Quick Presets */}
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              {[30, 45, 60, 90].map((mins) => (
+                <button
+                  key={mins}
+                  type="button"
+                  onClick={() => setEngUzunOtirish(mins)}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-xs ${
+                    engUzunOtirish === mins 
+                      ? 'bg-rose-600 text-white font-extrabold' 
+                      : 'bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-rose-400'
+                  }`}
+                >
+                  {mins} {lang === 'ru' ? 'мин' : lang === 'en' ? 'min' : 'daq'}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* 4. Mikrofaollik pauzalari soni */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 flex items-center justify-between">
+          <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 flex items-center justify-between shadow-sm">
             <div>
-              <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-500" /> {t('fieldPauses')}
               </span>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                {lang === 'ru' ? 'Рекомендовано: 3-5 пауз в день' : lang === 'en' ? 'Recommended: 3-5 pauses/day' : 'Tavsiya: kuniga 3-5 pauza'}
+              </p>
             </div>
 
-            <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-1.5 rounded-2xl border border-gray-200 dark:border-slate-700">
+            <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 rounded-2xl border-2 border-slate-200 dark:border-slate-700 shadow-sm">
               <button
                 type="button"
                 onClick={() => setPauzaSoni(Math.max(0, pauzaSoni - 1))}
-                className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200 flex items-center justify-center font-bold hover:bg-gray-200 transition"
+                className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center justify-center font-extrabold hover:bg-slate-200 transition"
+                aria-label="Kamaytirish"
               >
                 <Minus className="w-4 h-4" />
               </button>
 
-              <span className="w-8 text-center text-lg font-extrabold text-gray-900 dark:text-white">
+              <span className="w-8 text-center text-xl font-extrabold text-slate-900 dark:text-white">
                 {pauzaSoni}
               </span>
 
               <button
                 type="button"
                 onClick={() => setPauzaSoni(pauzaSoni + 1)}
-                className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold hover:bg-emerald-700 transition"
+                className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-extrabold hover:bg-emerald-700 transition shadow-md shadow-emerald-600/30"
+                aria-label="Oshirish"
               >
                 <Plus className="w-4 h-4" />
               </button>
@@ -206,15 +306,27 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
           </div>
 
           {/* 5. Uyqu davomiyligi */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+          <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <Moon className="w-4 h-4 text-indigo-500" /> {t('fieldSleep')}
               </span>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
-                {uyquSoat} soat
-              </span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  step="0.5"
+                  min="0"
+                  max="24"
+                  value={uyquSoat}
+                  onChange={(e) => setUyquSoat(Number(e.target.value))}
+                  className="w-20 px-2 py-1 text-right text-sm font-extrabold rounded-xl bg-white dark:bg-slate-800 border-2 border-indigo-500/50 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                  {lang === 'ru' ? 'ч' : lang === 'en' ? 'hrs' : 'soat'}
+                </span>
+              </div>
             </div>
+
             <input
               type="range"
               min="4"
@@ -222,20 +334,35 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               step="0.5"
               value={uyquSoat}
               onChange={(e) => setUyquSoat(Number(e.target.value))}
-              className="w-full accent-indigo-600 cursor-pointer"
+              className="w-full accent-indigo-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
             />
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {uyquSoat >= 7 && uyquSoat <= 9 ? '🟢 7–9 soat (Optimal tiklanish me\'yori)' : '⚠️ Me\'yoriy oraliq: 7–9 soat'}
+            </div>
           </div>
 
           {/* 6. Ekran vaqti */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
+          <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
                 <Smartphone className="w-4 h-4 text-purple-500" /> {t('fieldScreen')}
               </span>
-              <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300">
-                {ekranSoat} soat
-              </span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  step="0.5"
+                  min="0"
+                  max="24"
+                  value={ekranSoat}
+                  onChange={(e) => setEkranSoat(Number(e.target.value))}
+                  className="w-20 px-2 py-1 text-right text-sm font-extrabold rounded-xl bg-white dark:bg-slate-800 border-2 border-purple-500/50 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                  {lang === 'ru' ? 'ч' : lang === 'en' ? 'hrs' : 'soat'}
+                </span>
+              </div>
             </div>
+
             <input
               type="range"
               min="1"
@@ -243,15 +370,18 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               step="0.5"
               value={ekranSoat}
               onChange={(e) => setEkranSoat(Number(e.target.value))}
-              className="w-full accent-purple-600 cursor-pointer"
+              className="w-full accent-purple-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
             />
+            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+              {ekranSoat <= 4 ? '🟢 O\'rtacha me\'yor' : '⚠️ 4 soatdan ortiq ekran yuklamasi'}
+            </div>
           </div>
 
         </div>
 
-        {/* 7. Kayfiyat */}
-        <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 space-y-3">
-          <label className="font-bold text-sm text-gray-800 dark:text-gray-200 flex items-center gap-2">
+        {/* 7. Kayfiyat - Big touchable buttons with high contrast */}
+        <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-3 shadow-sm">
+          <label className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
             <Smile className="w-4 h-4 text-amber-500" /> {t('fieldMood')}
           </label>
           
@@ -264,14 +394,14 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
                   key={score}
                   type="button"
                   onClick={() => setKayfiyatBall(score)}
-                  className={`p-3 rounded-2xl border text-center transition flex flex-col items-center gap-1 ${
+                  className={`p-3 sm:p-4 rounded-2xl border-2 text-center transition-all flex flex-col items-center gap-1.5 ${
                     isSelected
-                      ? 'bg-emerald-100 dark:bg-emerald-950 border-emerald-500 shadow-md ring-2 ring-emerald-500/50'
-                      : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-700'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-500 shadow-lg shadow-emerald-500/20 scale-105'
+                      : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
                   }`}
                 >
-                  <span className="text-2xl">{emoji.char}</span>
-                  <span className="text-[10px] font-bold text-gray-700 dark:text-gray-300">{score}-ball</span>
+                  <span className="text-3xl">{emoji.char}</span>
+                  <span className="text-xs font-extrabold text-slate-800 dark:text-slate-200">{score}-ball</span>
                 </button>
               );
             })}
@@ -280,23 +410,34 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
 
         {/* 8. Refleksiya */}
         <div className="space-y-2">
-          <label className="font-bold text-sm text-gray-800 dark:text-gray-200">
+          <label className="font-extrabold text-sm text-slate-800 dark:text-slate-100">
             {t('fieldReflection')}
           </label>
           <textarea
             rows={2}
             value={refleksiyaMatn}
             onChange={(e) => setRefleksiyaMatn(e.target.value)}
-            placeholder="..."
-            className="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 transition"
+            placeholder={lang === 'ru' ? 'Кратко опишите как прошли паузы активности и самочувствие...' : lang === 'en' ? 'Briefly describe your activity breaks and how you felt today...' : 'Bugungi harakat pauzalari va o\'zingizni his qilishingiz haqida qisqacha...'}
+            className="w-full p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200 dark:border-slate-800 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500 transition font-medium"
           />
         </div>
 
-        {/* Submit Button */}
-        <div className="pt-2">
+        {/* Real-time Status Card & Submit Button */}
+        <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border-2 border-emerald-200 dark:border-emerald-800/80 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-center sm:text-left">
+            <div className="text-xs font-extrabold uppercase text-emerald-800 dark:text-emerald-300">
+              {lang === 'ru' ? 'Текущий расчет нормы за день:' : lang === 'en' ? 'Daily Norm Calculation:' : 'Kunlik me\'yor hisobi:'}
+            </div>
+            <div className="text-sm font-bold text-slate-800 dark:text-slate-200">
+              {qadam >= 8000 
+                ? (lang === 'ru' ? '✅ Целевая норма шагов (8 000) успешно достигнута!' : lang === 'en' ? '✅ Target step norm (8,000) successfully reached!' : '✅ Maqsadli qadam me\'yoriga (8 000) erishildi!') 
+                : (lang === 'ru' ? `🏃 До нормы осталось еще ${8000 - qadam} шагов.` : lang === 'en' ? `🏃 ${8000 - qadam} more steps to target norm.` : `🏃 Me'yorga erishish uchun yana ${8000 - qadam} qadam zarur.`)}
+            </div>
+          </div>
+
           <button
             type="submit"
-            className="w-full py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base transition shadow-xl shadow-emerald-600/30 flex items-center justify-center gap-2 shrink-0"
           >
             <Save className="w-5 h-5" />
             <span>{t('btnSaveDiary')}</span>
@@ -304,6 +445,43 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
         </div>
 
       </form>
+
+      {/* Previous Entries History Table */}
+      {entries.length > 0 && (
+        <div className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl border-2 border-slate-200/80 dark:border-slate-700 space-y-4">
+          <h2 className="text-lg font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+            <Footprints className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+            <span>{lang === 'ru' ? 'История недавних записей' : lang === 'en' ? 'Recent Activity Logs' : 'So\'nggi yozuvlar tarixi'}</span>
+          </h2>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs sm:text-sm text-left">
+              <thead>
+                <tr className="border-b-2 border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400">
+                  <th className="py-2.5 px-3 font-extrabold">Sana</th>
+                  <th className="py-2.5 px-3 font-extrabold">Qadamlar</th>
+                  <th className="py-2.5 px-3 font-extrabold">Faol daqiqa</th>
+                  <th className="py-2.5 px-3 font-extrabold">O'tirish</th>
+                  <th className="py-2.5 px-3 font-extrabold">Pauzalar</th>
+                  <th className="py-2.5 px-3 font-extrabold">Kayfiyat</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+                {entries.slice(-5).reverse().map((entry, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-900/40 transition">
+                    <td className="py-3 px-3 font-bold text-slate-900 dark:text-white">{entry.sana}</td>
+                    <td className="py-3 px-3 font-extrabold text-emerald-600 dark:text-emerald-400">{entry.qadam.toLocaleString()}</td>
+                    <td className="py-3 px-3 font-semibold text-slate-700 dark:text-slate-300">{entry.faol_daqiqa} daq</td>
+                    <td className="py-3 px-3 font-semibold text-slate-700 dark:text-slate-300">{entry.eng_uzun_otirish} daq</td>
+                    <td className="py-3 px-3 font-bold text-amber-600 dark:text-amber-400">{entry.pauza_soni} ta</td>
+                    <td className="py-3 px-3 text-lg">{getEmoji(entry.kayfiyat_ball).char}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
 
     </div>
   );

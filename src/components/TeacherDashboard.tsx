@@ -93,34 +93,37 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left: Schedule & Pause Attachment */}
-        <div className="lg:col-span-6 bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-gray-100 dark:border-slate-700 shadow-xl space-y-6">
-          <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <Calendar className="w-5 h-5 text-emerald-500" /> Dars jadvali va Pauzalar biriktiruvi
+        <div className="lg:col-span-6 bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border-2 border-slate-200/80 dark:border-slate-700 shadow-xl space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-emerald-500" /> 
+              <span>{lang === 'ru' ? 'Расписание занятий и привязка пауз' : lang === 'en' ? 'Lesson Schedule & Pause Attachment' : 'Dars jadvali va Pauzalar biriktiruvi'}</span>
             </h2>
           </div>
 
           {/* Subject selection */}
           <div className="space-y-3">
-            <label className="text-xs font-bold text-gray-800 dark:text-gray-200">Mashg'ulotni tanlang:</label>
+            <label className="text-xs font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+              {lang === 'ru' ? 'Выберите занятие:' : lang === 'en' ? 'Select lesson:' : 'Mashg\'ulotni tanlang:'}
+            </label>
             <select
               value={selectedSubject}
               onChange={(e) => setSelectedSubject(e.target.value)}
-              className="w-full p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold text-gray-800 dark:text-gray-200 outline-none"
+              className="w-full p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
             >
-              <option value="Pedagogika nazariyasi">Pedagogika nazariyasi (1-juftlik, 08:30)</option>
-              <option value="Psixologiya">Psixologiya (2-juftlik, 10:00)</option>
-              <option value="Boshlang'ich ta'lim metodikasi">Boshlang'ich ta'lim metodikasi (3-juftlik, 11:30)</option>
+              <option value="Pedagogika nazariyasi">Pedagogika nazariyasi (1-{lang === 'ru' ? 'пара' : lang === 'en' ? 'pair' : 'juft'}, 08:30)</option>
+              <option value="Psixologiya">Psixologiya (2-{lang === 'ru' ? 'пара' : lang === 'en' ? 'pair' : 'juft'}, 10:00)</option>
+              <option value="Boshlang'ich ta'lim metodikasi">Boshlang'ich ta'lim metodikasi (3-{lang === 'ru' ? 'пара' : lang === 'en' ? 'pair' : 'juft'}, 11:30)</option>
             </select>
 
-            <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block pt-2">
-              Mashg'ulotga biriktiriladigan faollik kartochkasi:
+            <label className="text-xs font-extrabold text-slate-800 dark:text-slate-200 block pt-2 uppercase tracking-wider">
+              {lang === 'ru' ? 'Прикрепляемая карточка активности:' : lang === 'en' ? 'Activity card to attach:' : 'Mashg\'ulotga biriktiriladigan faollik kartochkasi:'}
             </label>
             <div className="flex gap-2">
               <select
                 value={attachedCardId}
                 onChange={(e) => setAttachedCardId(e.target.value)}
-                className="flex-1 p-3 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-bold text-gray-800 dark:text-gray-200 outline-none"
+                className="flex-1 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-bold text-slate-900 dark:text-white outline-none focus:border-emerald-500"
               >
                 {cards.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -130,54 +133,65 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
               </select>
               <button
                 onClick={handleAttachCard}
-                className="px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition flex items-center gap-1 shadow-md"
+                className="px-5 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm transition flex items-center gap-1.5 shadow-lg shadow-emerald-600/30 shrink-0"
               >
-                <PlusCircle className="w-4 h-4" /> Biriktirish
+                <PlusCircle className="w-4 h-4" /> 
+                <span>{lang === 'ru' ? 'Прикрепить' : lang === 'en' ? 'Attach' : 'Biriktirish'}</span>
               </button>
             </div>
           </div>
 
           {/* Methodological Guidance block */}
-          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
-            <h4 className="font-bold text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
-              <Sparkles className="w-4 h-4" /> O'qituvchi uchun uslubiy tavsiya:
+          <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border-2 border-slate-200 dark:border-slate-800 space-y-2">
+            <h4 className="font-extrabold text-xs text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4" /> 
+              <span>{lang === 'ru' ? 'Методическая рекомендация для преподавателя:' : lang === 'en' ? 'Methodological advice for teacher:' : 'O\'qituvchi uchun uslubiy tavsiya:'}</span>
             </h4>
-            <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-              Mikrofaollik pauzasini darsning 35–40-daqiqa oralig'ida (diqqat pasaygan pallada) o'tkazish tavsiya etiladi. Pauza davomiyligi 3–5 daqiqadan oshmasligi darkor.
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium">
+              {lang === 'ru'
+                ? 'Рекомендуется проводить микропаузу на 35–40-й минуте занятия (в период естественного спада внимания). Продолжительность не должна превышать 3–5 минут.'
+                : lang === 'en'
+                ? 'It is recommended to conduct micro-pauses at the 35–40 minute mark of the lesson (during attention dip). Duration should not exceed 3–5 minutes.'
+                : 'Mikrofaollik pauzasini darsning 35–40-daqiqa oralig\'ida (diqqat pasaygan pallada) o\'tkazish tavsiya etiladi. Pauza davomiyligi 3–5 daqiqadan oshmasligi darkor.'}
             </p>
           </div>
         </div>
 
         {/* Right: Observation Card Filling */}
-        <div className="lg:col-span-6 bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-gray-100 dark:border-slate-700 shadow-xl space-y-6">
-          <div className="flex items-center justify-between border-b border-gray-100 dark:border-slate-700 pb-4">
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-              <Eye className="w-5 h-5 text-teal-500" /> Darsdagi Kuzatuv Kartasini To'ldirish
+        <div className="lg:col-span-6 bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border-2 border-slate-200/80 dark:border-slate-700 shadow-xl space-y-6">
+          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-4">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
+              <Eye className="w-5 h-5 text-teal-500" /> 
+              <span>{lang === 'ru' ? 'Заполнение карты наблюдения занятия' : lang === 'en' ? 'Complete Lesson Observation Card' : 'Darsdagi Kuzatuv Kartasini To\'ldirish'}</span>
             </h2>
           </div>
 
           <form onSubmit={handleObservationSubmit} className="space-y-4">
             <div>
-              <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block mb-1">Dars nomi:</label>
+              <label className="text-xs font-extrabold text-slate-800 dark:text-slate-200 block mb-1 uppercase tracking-wider">
+                {lang === 'ru' ? 'Название занятия:' : lang === 'en' ? 'Lesson subject:' : 'Dars nomi:'}
+              </label>
               <input
                 type="text"
                 disabled
                 value={selectedSubject}
-                className="w-full p-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 text-xs font-bold text-gray-500"
+                className="w-full p-3 rounded-2xl bg-slate-100 dark:bg-slate-900 text-xs sm:text-sm font-extrabold text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-bold text-gray-800 dark:text-gray-200 block mb-1">Pauza turi:</label>
+                <label className="text-xs font-extrabold text-slate-800 dark:text-slate-200 block mb-1 uppercase tracking-wider">
+                  {lang === 'ru' ? 'Тип паузы:' : lang === 'en' ? 'Pause type:' : 'Pauza turi:'}
+                </label>
                 <select
                   value={obsPauzaType}
                   onChange={(e) => setObsPauzaType(e.target.value as any)}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-xs font-semibold"
+                  className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 outline-none"
                 >
-                  <option value="gigiyenik-tiklovchi">Gigiyenik-tiklovchi</option>
-                  <option value="kognitiv-faollashtiruvchi">Kognitiv-faollashtiruvchi</option>
-                  <option value="kasbiy-metodik">Kasbiy-metodik</option>
+                  <option value="gigiyenik-tiklovchi">{lang === 'ru' ? 'Гигиенически-восстановительная' : lang === 'en' ? 'Hygienic-Restorative' : 'Gigiyenik-tiklovchi'}</option>
+                  <option value="kognitiv-faollashtiruvchi">{lang === 'ru' ? 'Когнитивно-активизирующая' : lang === 'en' ? 'Cognitive-Activating' : 'Kognitiv-faollashtiruvchi'}</option>
+                  <option value="kasbiy-metodik">{lang === 'ru' ? 'Профессионально-методическая' : lang === 'en' ? 'Professional-Methodical' : 'Kasbiy-metodik'}</option>
                 </select>
               </div>
 

@@ -32,11 +32,30 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.4);
+  background: rgba(148, 163, 184, 0.5);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 114, 128, 0.6);
+  background: rgba(100, 116, 139, 0.8);
+}
+
+/* Accessible focus ring and touch styles */
+*:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Touch action optimization for mobile */
+button, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Interactive Card Styles with clear elevation */
+.rfm-card {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.rfm-card:hover {
+  transform: translateY(-2px);
 }
 
 /* Print styles for Cards bank */
