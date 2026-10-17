@@ -535,7 +535,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     )}
 
     {/* Mobile Sticky Bottom Navigation for Rapid Field Access (outside <header>) */}
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-1.5 px-2 flex justify-around items-center shadow-[0_-4px_16px_rgba(0,0,0,0.08)]">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 py-1 px-1 flex justify-around items-center shadow-[0_-4px_16px_rgba(0,0,0,0.08)] w-full max-w-full">
       {tabs.slice(0, 4).map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
@@ -543,14 +543,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           <button
             key={tab.id}
             onClick={() => handleNavClick(tab.id)}
-            className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${
+            className={`flex-1 min-w-0 max-w-[72px] flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer ${
               isActive 
                 ? 'text-emerald-600 dark:text-emerald-400 font-bold scale-105' 
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
             }`}
           >
             <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
-            <span className="text-[10px] mt-0.5 max-w-[64px] truncate">{tab.label}</span>
+            <span className="text-[10px] mt-0.5 w-full text-center truncate">{tab.label}</span>
           </button>
         );
       })}
@@ -558,14 +558,14 @@ export const Navbar: React.FC<NavbarProps> = ({
       {/* All Modules / Menu Button */}
       <button
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${
+        className={`flex-1 min-w-0 max-w-[72px] flex flex-col items-center justify-center py-1 px-1 rounded-xl transition-all cursor-pointer ${
           mobileMenuOpen
             ? 'text-emerald-600 dark:text-emerald-400 font-bold scale-105'
             : 'text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400'
         }`}
       >
         {mobileMenuOpen ? <X className="w-5 h-5 stroke-[2.5]" /> : <Menu className="w-5 h-5 stroke-[1.8]" />}
-        <span className="text-[10px] mt-0.5">{lang === 'ru' ? 'Разделы' : lang === 'en' ? 'Menu' : "Bo'limlar"}</span>
+        <span className="text-[10px] mt-0.5 w-full text-center truncate">{lang === 'ru' ? 'Разделы' : lang === 'en' ? 'Menu' : "Bo'limlar"}</span>
       </button>
     </div>
   </>
