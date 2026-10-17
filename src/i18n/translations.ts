@@ -187,7 +187,31 @@ export const translations = {
     // Level Names
     levelHigh: "Yuqori daraja",
     levelMedium: "O'rta daraja",
-    levelLow: "Quyi daraja"
+    levelLow: "Quyi daraja",
+
+    // Authentication & Role Access
+    authModalTitle: "Tizimga kirish va Ruxsatlar",
+    authStudentTab: "🎓 Talaba (Ism-Familiya)",
+    authSupervisorTab: "🔐 Nazoratchilar (Login va Parol)",
+    authStudentDesc: "Talaba faqat o'z ism va familiyasini kiritib tizimga tezkor kiradi (parol shart emas).",
+    authSupervisorDesc: "Nazoratchilar (O'qituvchi, Tyutor, Kafedra) login va maxfiy parol orqali kirib nazorat qiladi va ma'lumot qo'shadi.",
+    authFullName: "Ism va Familiyangiz",
+    authFullNamePlaceholder: "Masalan: Jasur Alimov",
+    authGroupLabel: "Talaba guruhi",
+    authEnterAsStudent: "Talaba sifatida kirish",
+    authLoginLabel: "Nazoratchi Logini",
+    authLoginPlaceholder: "oqituvchi, tyutor yoki kafedra",
+    authPasswordLabel: "Maxfiy Parol",
+    authEnterAsSupervisor: "Nazoratchi sifatida kirish",
+    authLogout: "Chiqish",
+    authSwitchUser: "Profilni almashtirish",
+    authLoggedInAs: "Tizimdagi foydalanuvchi:",
+    authInvalidCreds: "Login yoki parol noto'g'ri kiritildi! Iltimos, qayta urinib ko'ring.",
+    authQuickCredentials: "Sinov uchun standart nazoratchi login/parollari:",
+    authTeacherNotice: "O'qituvchi: mashg'ulotlar, kuzatuv kartasi, kartochkalar banki va LMS ma'lumotlarini qo'shadi.",
+    authTutorNotice: "Tyutor: guruh talabalari monitoringi va suhbat qaydlarini qo'shadi.",
+    authKafedraNotice: "Kafedra: tajriba va nazorat guruhlari hisobotini nazorat qiladi.",
+    authRestrictedNotice: "Ushbu bo'lim faqat nazoratchilar uchun! Kirish uchun login va parolingizni kiriting."
   },
   ru: {
     // Brand & Nav
@@ -375,7 +399,31 @@ export const translations = {
     // Level Names
     levelHigh: "Высокий уровень",
     levelMedium: "Средний уровень",
-    levelLow: "Низкий уровень"
+    levelLow: "Низкий уровень",
+
+    // Authentication & Role Access
+    authModalTitle: "Вход в систему и Авторизация",
+    authStudentTab: "🎓 Студент (Имя и Фамилия)",
+    authSupervisorTab: "🔐 Кураторы (Логин и Пароль)",
+    authStudentDesc: "Студент входит быстро, просто указав имя и фамилию (пароль не требуется).",
+    authSupervisorDesc: "Кураторы (Преподаватель, Тьютор, Кафедра) входят по логину и паролю для контроля и ввода данных.",
+    authFullName: "Ваше Имя и Фамилия",
+    authFullNamePlaceholder: "Например: Жасур Алимов",
+    authGroupLabel: "Группа студента",
+    authEnterAsStudent: "Войти как студент",
+    authLoginLabel: "Логин куратора",
+    authLoginPlaceholder: "oqituvchi, tyutor или kafedra",
+    authPasswordLabel: "Секретный пароль",
+    authEnterAsSupervisor: "Войти как куратор",
+    authLogout: "Выйти",
+    authSwitchUser: "Сменить профиль",
+    authLoggedInAs: "Пользователь в системе:",
+    authInvalidCreds: "Неверный логин или пароль! Пожалуйста, попробуйте снова.",
+    authQuickCredentials: "Тестовые логины и пароли кураторов:",
+    authTeacherNotice: "Преподаватель: занятия, карты наблюдения, банк карточек и материалы LMS.",
+    authTutorNotice: "Тьютор: мониторинг студентов группы и протоколы бесед.",
+    authKafedraNotice: "Кафедра: контроль отчетов экспериментальной и контрольной групп.",
+    authRestrictedNotice: "Этот раздел доступен только кураторам! Для входа введите логин и пароль."
   },
   en: {
     // Brand & Nav
@@ -563,6 +611,30 @@ export const translations = {
     // Level Names
     levelHigh: "High Level",
     levelMedium: "Medium Level",
-    levelLow: "Low Level"
+    levelLow: "Low Level",
+
+    // Authentication & Role Access
+    authModalTitle: "Sign In & Role Authorization",
+    authStudentTab: "🎓 Student (Name & Surname)",
+    authSupervisorTab: "🔐 Supervisors (Login & Password)",
+    authStudentDesc: "Students sign in easily by entering their full name (no password required).",
+    authSupervisorDesc: "Supervisors (Teacher, Tutor, Department) sign in with login and password for monitoring and data entry.",
+    authFullName: "Your Full Name",
+    authFullNamePlaceholder: "e.g. Jasur Alimov",
+    authGroupLabel: "Student Group",
+    authEnterAsStudent: "Sign In as Student",
+    authLoginLabel: "Supervisor Login",
+    authLoginPlaceholder: "oqituvchi, tyutor or kafedra",
+    authPasswordLabel: "Secret Password",
+    authEnterAsSupervisor: "Sign In as Supervisor",
+    authLogout: "Sign Out",
+    authSwitchUser: "Switch Profile",
+    authLoggedInAs: "Logged in user:",
+    authInvalidCreds: "Invalid login or password! Please check and try again.",
+    authQuickCredentials: "Default test credentials for supervisors:",
+    authTeacherNotice: "Teacher: adds lessons, observation cards, activity bank cards, and LMS content.",
+    authTutorNotice: "Tutor: monitors group students and adds individual conversation notes.",
+    authKafedraNotice: "Department: monitors experimental and control groups reports and analytics.",
+    authRestrictedNotice: "This section is restricted to supervisors! Please sign in with your credentials."
   }
 };

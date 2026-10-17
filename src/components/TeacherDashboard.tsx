@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, ScheduleItem, ObservationCard } from '../types';
+import { Card, ScheduleItem, ObservationCard, AuthenticatedUser } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { 
   UserCheck, 
@@ -18,13 +18,15 @@ interface TeacherDashboardProps {
   cards: Card[];
   observationCards: ObservationCard[];
   onAddObservation: (card: Omit<ObservationCard, 'id'>) => void;
+  currentUser?: AuthenticatedUser;
 }
 
 export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   schedule,
   cards,
   observationCards,
-  onAddObservation
+  onAddObservation,
+  currentUser
 }) => {
   const { t, lang } = useLanguage();
   const [selectedSubject, setSelectedSubject] = useState('Pedagogika nazariyasi');
@@ -45,7 +47,7 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
   const handleObservationSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onAddObservation({
-      oqituvchi_id: 'usr_002',
+      oqituvchi_id: currentUser?.id || 'usr_002',
       guruh_id: 'grp_301',
       mashgulot_nomi: selectedSubject,
       pauza_turi: obsPauzaType,
@@ -67,6 +69,11 @@ export const TeacherDashboard: React.FC<TeacherDashboardProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold mb-2">
               <UserCheck className="w-3.5 h-3.5" /> {t('roleTeacher')}
+              {currentUser && (
+                <span className="ml-2 pl-2 border-l border-teal-400/40 text-white font-black">
+                  {currentUser.fio}
+                </span>
+              )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               {t('teacherDashTitle')}

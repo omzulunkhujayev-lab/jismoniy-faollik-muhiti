@@ -51,6 +51,36 @@ export const mockUsers: Record<string, User> = {
   }
 };
 
+export const SUPERVISOR_CREDENTIALS = [
+  {
+    role: 'oqituvchi' as const,
+    login: 'oqituvchi',
+    altLogin: 'teacher',
+    password: 'teacher123',
+    altPassword: 'oqituvchi123',
+    title: "O'qituvchi",
+    user: mockUsers.oqituvchi
+  },
+  {
+    role: 'tyutor' as const,
+    login: 'tyutor',
+    altLogin: 'tutor',
+    password: 'tutor123',
+    altPassword: 'tyutor123',
+    title: "Guruh Tyutori",
+    user: mockUsers.tyutor
+  },
+  {
+    role: 'kafedra' as const,
+    login: 'kafedra',
+    altLogin: 'admin',
+    password: 'admin123',
+    altPassword: 'kafedra123',
+    title: "Kafedra Mudiri / Administrator",
+    user: mockUsers.kafedra
+  }
+];
+
 export const mockGroups: Group[] = [
   {
     id: 'grp_301',

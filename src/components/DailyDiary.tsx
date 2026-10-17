@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { DailyEntry } from '../types';
+import { DailyEntry, AuthenticatedUser } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { 
   Footprints, 
@@ -15,7 +15,8 @@ import {
   Sparkles,
   AlertTriangle,
   RefreshCw,
-  Settings2
+  Settings2,
+  GraduationCap
 } from 'lucide-react';
 import { 
   fetchDeviceTelemetry, 
@@ -27,9 +28,10 @@ import {
 interface DailyDiaryProps {
   entries: DailyEntry[];
   onAddEntry: (entry: Omit<DailyEntry, 'id'>) => void;
+  currentUser?: AuthenticatedUser;
 }
 
-export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) => {
+export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry, currentUser }) => {
   const { t, lang } = useLanguage();
   const todayStr = new Date().toISOString().split('T')[0];
 
@@ -93,7 +95,7 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onAddEntry({
-      user_id: 'usr_001',
+      user_id: currentUser?.id || 'usr_001',
       sana,
       qadam,
       faol_daqiqa: faolDaqiqa,
@@ -128,6 +130,11 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-xs font-bold mb-2">
             <Sparkles className="w-3.5 h-3.5" /> {t('quickEntry')}
+            {currentUser && (
+              <span className="ml-2 pl-2 border-l border-white/30 font-black flex items-center gap-1 text-emerald-100">
+                <GraduationCap className="w-3 h-3" /> {currentUser.fio} ({currentUser.guruh_id?.split(' ')[0] || '301-guruh'})
+              </span>
+            )}
           </div>
           <h1 className="text-2xl sm:text-3xl font-extrabold">{t('diaryTitle')}</h1>
           <p className="text-emerald-100 text-xs sm:text-sm mt-1">

@@ -13,6 +13,18 @@ export interface User {
   tibbiy_guruh: 'asosiy' | 'tayyorgarlik' | 'maxsus';
 }
 
+export interface AuthenticatedUser {
+  id: string;
+  role: UserRole;
+  fio: string;
+  guruh_id?: string;
+  muassasa?: string;
+  yonalish?: string;
+  kurs?: number;
+  isLoggedIn: boolean;
+  loginTime?: string;
+}
+
 export interface Group {
   id: string;
   nomi: string;

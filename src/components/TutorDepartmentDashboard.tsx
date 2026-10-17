@@ -15,9 +15,10 @@ import {
 
 interface TutorDepartmentDashboardProps {
   userRole: 'tyutor' | 'kafedra';
+  currentUser?: any;
 }
 
-export const TutorDepartmentDashboard: React.FC<TutorDepartmentDashboardProps> = ({ userRole }) => {
+export const TutorDepartmentDashboard: React.FC<TutorDepartmentDashboardProps> = ({ userRole, currentUser }) => {
   const { t, lang } = useLanguage();
   const [activeSubView, setActiveSubView] = useState<'tutor' | 'department'>(userRole === 'tyutor' ? 'tutor' : 'department');
   const [exportNotice, setExportNotice] = useState<string | null>(null);
@@ -60,6 +61,11 @@ export const TutorDepartmentDashboard: React.FC<TutorDepartmentDashboardProps> =
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold mb-2">
               <BarChart3 className="w-3.5 h-3.5" /> 
               {activeSubView === 'tutor' ? t('tutorDashTitle') : t('deptDashTitle')}
+              {currentUser && (
+                <span className="ml-2 pl-2 border-l border-indigo-400/40 text-white font-black">
+                  {currentUser.fio}
+                </span>
+              )}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               {activeSubView === 'tutor' ? t('tutorDashTitle') : t('deptDashTitle')}

@@ -20,6 +20,7 @@ interface CardsBankProps {
   cards: Card[];
   onToggleFavorite: (cardId: string) => void;
   onAddToLesson?: (card: Card) => void;
+  onAddCard?: (newCard: Omit<Card, 'id' | 'isFavorite'>) => void;
   userRole: string;
 }
 
@@ -27,6 +28,7 @@ export const CardsBank: React.FC<CardsBankProps> = ({
   cards,
   onToggleFavorite,
   onAddToLesson,
+  onAddCard,
   userRole
 }) => {
   const { lang, t } = useLanguage();
@@ -37,6 +39,15 @@ export const CardsBank: React.FC<CardsBankProps> = ({
   const [selectedCardForModal, setSelectedCardForModal] = useState<Card | null>(null);
   const [printCard, setPrintCard] = useState<Card | null>(null);
   const [addedNotice, setAddedNotice] = useState<string | null>(null);
+
+  // New Card Form Modal for Teachers and Supervisors
+  const [showAddCardModal, setShowAddCardModal] = useState(false);
+  const [newCardName, setNewCardName] = useState('');
+  const [newCardCategory, setNewCardCategory] = useState<CardCategory>('gigiyenik-tiklovchi');
+  const [newCardDuration, setNewCardDuration] = useState('2-3 daq.');
+  const [newCardEquipment, setNewCardEquipment] = useState("O'rindiqda o'tirgan holda, maxsus jihoz shart emas");
+  const [newCardSteps, setNewCardSteps] = useState('');
+  const [newCardNote, setNewCardNote] = useState('');
 
   // Helper function to translate card details based on active language
   const getTranslatedCard = (card: Card) => {
@@ -133,7 +144,18 @@ export const CardsBank: React.FC<CardsBankProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {(userRole === 'oqituvchi' || userRole === 'kafedra') && (
+              <button
+                type="button"
+                onClick={() => setShowAddCardModal(true)}
+                className="px-4 py-2.5 rounded-xl text-xs font-black transition flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white shadow-md shadow-emerald-600/30"
+              >
+                <PlusCircle className="w-4 h-4" />
+                <span>{lang === 'ru' ? '+ Добавить карточку' : lang === 'en' ? '+ Add Card' : '+ Yangi kartochka qo\'shish'}</span>
+              </button>
+            )}
+
             <button
               onClick={() => setOnlyFavorites(!onlyFavorites)}
               className={`px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2 border ${
@@ -318,6 +340,143 @@ export const CardsBank: React.FC<CardsBankProps> = ({
                 OK
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Card Modal for Teachers / Supervisors */}
+      {showAddCardModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-gray-100 dark:border-slate-700 max-h-[90vh] overflow-y-auto space-y-5 animate-in fade-in zoom-in duration-200">
+            <div className="flex justify-between items-center border-b border-gray-100 dark:border-slate-700 pb-3">
+              <h2 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
+                <PlusCircle className="w-5 h-5 text-emerald-600" />
+                <span>{lang === 'ru' ? 'Добавление новой карточки активности' : lang === 'en' ? 'Add New Physical Activity Card' : "Yangi faollik kartochkasi qo'shish"}</span>
+              </h2>
+              <button
+                type="button"
+                onClick={() => setShowAddCardModal(false)}
+                className="p-2 rounded-xl text-gray-400 hover:bg-slate-100 dark:hover:bg-slate-700"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (!newCardName.trim()) return;
+                if (onAddCard) {
+                  onAddCard({
+                    raqam: cards.length + 1,
+                    nomi: newCardName.trim(),
+                    turi: newCardCategory,
+                    davomiyligi: newCardDuration,
+                    joy_jihoz: newCardEquipment,
+                    algoritm: newCardSteps.split('\n').filter(s => s.trim().length > 0),
+                    mos_fanlar: ['Barcha pedagogik fanlar'],
+                    metodik_eslatma: newCardNote || "O'qituvchi tomonidan auditoriya sharoitiga moslashtirilgan mikrofaollik.",
+                    moslashtirilgan_variant: "Sog'liq cheklovi bo'lgan talabalar uchun o'rindiqda yengil nafas mashqlari bilan bajariladi."
+                  });
+                }
+                setShowAddCardModal(false);
+                setNewCardName('');
+                setNewCardSteps('');
+                setNewCardNote('');
+                setAddedNotice(lang === 'ru' ? 'Новая карточка успешно добавлена в каталог!' : lang === 'en' ? 'New card added to catalog successfully!' : 'Yangi kartochka katalogga muvaffaqiyatli qo\'shildi!');
+                setTimeout(() => setAddedNotice(null), 3500);
+              }}
+              className="space-y-4 text-xs font-bold"
+            >
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 mb-1">Kartochka nomi:</label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Masalan: Ko'z va bo'yin mushaklari dinamik pauzasi"
+                  value={newCardName}
+                  onChange={(e) => setNewCardName(e.target.value)}
+                  className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-extrabold text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-300 mb-1">Pauza toifasi:</label>
+                  <select
+                    value={newCardCategory}
+                    onChange={(e) => setNewCardCategory(e.target.value as CardCategory)}
+                    className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-extrabold text-slate-900 dark:text-white"
+                  >
+                    <option value="gigiyenik-tiklovchi">Gigiyenik-tiklovchi</option>
+                    <option value="kognitiv-faollashtiruvchi">Kognitiv-faollashtiruvchi</option>
+                    <option value="kasbiy-metodik">Kasbiy-metodik</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 dark:text-slate-300 mb-1">Davomiyligi:</label>
+                  <select
+                    value={newCardDuration}
+                    onChange={(e) => setNewCardDuration(e.target.value)}
+                    className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-extrabold text-slate-900 dark:text-white"
+                  >
+                    <option value="2-3 daq.">2-3 daq.</option>
+                    <option value="3-5 daq.">3-5 daq.</option>
+                    <option value="1-2 daq.">1-2 daq.</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 mb-1">Joy va zarur jihoz:</label>
+                <input
+                  type="text"
+                  value={newCardEquipment}
+                  onChange={(e) => setNewCardEquipment(e.target.value)}
+                  className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-extrabold text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 mb-1">O'tkazish algoritmi (har bir qadam alohida qatorda):</label>
+                <textarea
+                  rows={3}
+                  required
+                  placeholder={"1. To'g'ri o'tirib chuqur nafas oling.\n2. Yelkalar bilan aylanma harakat qiling.\n3. Qo'llarni yuqoriga cho'zing."}
+                  value={newCardSteps}
+                  onChange={(e) => setNewCardSteps(e.target.value)}
+                  className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-medium text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-700 dark:text-slate-300 mb-1">Metodik eslatma:</label>
+                <input
+                  type="text"
+                  placeholder="Darsning 40-45 daqiqalarida o'tkazish tavsiya etiladi."
+                  value={newCardNote}
+                  onChange={(e) => setNewCardNote(e.target.value)}
+                  className="w-full p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 font-medium text-slate-900 dark:text-white"
+                />
+              </div>
+
+              <div className="pt-3 border-t border-gray-100 dark:border-slate-700 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddCardModal(false)}
+                  className="px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-bold"
+                >
+                  {t('btnCancel')}
+                </button>
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-md shadow-emerald-600/30"
+                >
+                  {t('btnSave')}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

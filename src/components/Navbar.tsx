@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { UserRole } from '../types';
+import { UserRole, AuthenticatedUser } from '../types';
 import { useLanguage } from '../context/LanguageContext';
 import { Language } from '../i18n/translations';
 import { 
@@ -18,33 +18,54 @@ import {
   Sun, 
   Moon, 
   Menu, 
-  X,
-  ShieldAlert,
-  Home,
-  Globe
+  X, 
+  ShieldAlert, 
+  Home, 
+  Globe,
+  LogIn,
+  LogOut,
+  Lock,
+  User as UserIcon,
+  ChevronDown
 } from 'lucide-react';
 
 interface NavbarProps {
   currentRole: UserRole;
+  currentUser: AuthenticatedUser | null;
+  onOpenAuth: (initialTab?: 'talaba' | 'nazoratchi') => void;
   onRoleChange: (role: UserRole) => void;
   activeTab: string;
   onTabChange: (tab: string) => void;
   darkMode: boolean;
   onToggleDarkMode: () => void;
   onOpenGlossary: () => void;
+  onLogout: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentRole,
+  currentUser,
+  onOpenAuth,
   onRoleChange,
   activeTab,
   onTabChange,
   darkMode,
   onToggleDarkMode,
-  onOpenGlossary
+  onOpenGlossary,
+  onLogout
 }) => {
   const { lang, setLang, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleNavClick = (tabId: string) => {
+    const isSupervisorTab = tabId === 'teacher' || tabId === 'tutor' || tabId === 'department';
+    if (isSupervisorTab && currentUser?.role === 'talaba') {
+      onOpenAuth('nazoratchi');
+      return;
+    }
+    onTabChange(tabId);
+    setMobileMenuOpen(false);
+  };
 
   // Tab definitions based on role RBAC and active language
   const getTabs = () => {
@@ -153,21 +174,62 @@ export const Navbar: React.FC<NavbarProps> = ({
               {darkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
             </button>
 
-            {/* Role Switcher */}
-            <div className="relative flex items-center bg-slate-100 dark:bg-slate-800/90 p-1 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
-              <ShieldAlert className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 ml-1.5 mr-1" />
-              <select
-                value={currentRole}
-                onChange={(e) => onRoleChange(e.target.value as UserRole)}
-                className="bg-transparent text-xs font-bold text-slate-800 dark:text-slate-100 outline-none cursor-pointer pr-1"
-                aria-label="Foydalanuvchi roli"
+            {/* Authenticated User Profile Pill & Quick Actions */}
+            {currentUser?.isLoggedIn ? (
+              <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/90 p-1 pl-2.5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => onOpenAuth(currentUser.role === 'talaba' ? 'talaba' : 'nazoratchi')}
+                  className="flex items-center gap-2 hover:opacity-85 transition cursor-pointer text-left"
+                  title={t('authSwitchUser')}
+                >
+                  <div className={`p-1.5 rounded-xl text-white font-extrabold ${
+                    currentUser.role === 'talaba' ? 'bg-emerald-600' : 'bg-indigo-600'
+                  }`}>
+                    {currentUser.role === 'talaba' ? (
+                      <GraduationCap className="w-3.5 h-3.5" />
+                    ) : (
+                      <Lock className="w-3.5 h-3.5" />
+                    )}
+                  </div>
+                  <div className="leading-tight pr-1">
+                    <div className="text-xs font-black text-slate-900 dark:text-white max-w-[130px] sm:max-w-[170px] truncate">
+                      {currentUser.fio}
+                    </div>
+                    <div className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
+                      {currentUser.role === 'talaba' 
+                        ? `${t('roleStudent')} (${currentUser.guruh_id?.split(' ')[0] || '301'})`
+                        : currentUser.role === 'oqituvchi'
+                        ? t('roleTeacher')
+                        : currentUser.role === 'tyutor'
+                        ? t('roleTutor')
+                        : t('roleAdmin')
+                      }
+                    </div>
+                  </div>
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-400 mr-1" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  title={t('authLogout')}
+                  className="p-1.5 rounded-xl text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition"
+                  aria-label={t('authLogout')}
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => onOpenAuth('talaba')}
+                className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/30 transition cursor-pointer"
               >
-                <option value="talaba" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">{t('roleLabel')}: {t('roleStudent')}</option>
-                <option value="oqituvchi" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">{t('roleLabel')}: {t('roleTeacher')}</option>
-                <option value="tyutor" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">{t('roleLabel')}: {t('roleTutor')}</option>
-                <option value="kafedra" className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">{t('roleLabel')}: {t('roleAdmin')}</option>
-              </select>
-            </div>
+                <LogIn className="w-3.5 h-3.5" />
+                <span>{t('authModalTitle')}</span>
+              </button>
+            )}
           </div>
 
           {/* Mobile Hamburger Toggle & Quick Theme */}
@@ -201,7 +263,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               return (
                 <button
                   key={tab.id}
-                  onClick={() => onTabChange(tab.id)}
+                  onClick={() => handleNavClick(tab.id)}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
                     isActive 
                       ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 scale-[1.02]'
@@ -238,21 +300,62 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-bold text-slate-700 dark:text-slate-300">Rol:</span>
-            <select
-              value={currentRole}
-              onChange={(e) => {
-                onRoleChange(e.target.value as UserRole);
-                setMobileMenuOpen(false);
-              }}
-              className="bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-900 dark:text-white px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700"
-            >
-              <option value="talaba">{t('roleStudent')}</option>
-              <option value="oqituvchi">{t('roleTeacher')}</option>
-              <option value="tyutor">{t('roleTutor')}</option>
-              <option value="kafedra">{t('roleAdmin')}</option>
-            </select>
+          {/* Mobile User Profile & Auth */}
+          <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-3">
+            {currentUser?.isLoggedIn ? (
+              <div className="flex items-center gap-2.5 overflow-hidden">
+                <div className={`p-2 rounded-xl text-white font-extrabold shrink-0 ${
+                  currentUser.role === 'talaba' ? 'bg-emerald-600' : 'bg-indigo-600'
+                }`}>
+                  {currentUser.role === 'talaba' ? <GraduationCap className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                </div>
+                <div className="truncate">
+                  <div className="text-xs font-black text-slate-900 dark:text-white truncate">
+                    {currentUser.fio}
+                  </div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-bold">
+                    {currentUser.role === 'talaba' 
+                      ? `${t('roleStudent')} (${currentUser.guruh_id?.split(' ')[0] || '301'})`
+                      : currentUser.role === 'oqituvchi'
+                      ? t('roleTeacher')
+                      : currentUser.role === 'tyutor'
+                      ? t('roleTutor')
+                      : t('roleAdmin')
+                    }
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <span className="text-xs font-bold text-slate-600 dark:text-slate-300">
+                {t('authModalTitle')}
+              </span>
+            )}
+
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  onOpenAuth(currentUser?.role === 'talaba' ? 'talaba' : 'nazoratchi');
+                  setMobileMenuOpen(false);
+                }}
+                className="px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 text-xs font-black text-slate-800 dark:text-slate-200"
+              >
+                {currentUser?.isLoggedIn ? t('authSwitchUser') : t('authModalTitle')}
+              </button>
+              {currentUser?.isLoggedIn && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onLogout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="p-1.5 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400"
+                  title={t('authLogout')}
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex gap-2">
@@ -274,10 +377,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               return (
                 <button
                   key={tab.id}
-                  onClick={() => {
-                    onTabChange(tab.id);
-                    setMobileMenuOpen(false);
-                  }}
+                  onClick={() => handleNavClick(tab.id)}
                   className={`flex items-center gap-2.5 p-3 rounded-xl text-xs font-semibold transition-all ${
                     isActive 
                       ? 'bg-emerald-600 text-white font-bold shadow-md shadow-emerald-600/30'
@@ -301,7 +401,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           return (
             <button
               key={tab.id}
-              onClick={() => onTabChange(tab.id)}
+              onClick={() => handleNavClick(tab.id)}
               className={`flex flex-col items-center justify-center py-1 px-2.5 rounded-xl transition-all ${
                 isActive 
                   ? 'text-emerald-600 dark:text-emerald-400 font-bold scale-105' 

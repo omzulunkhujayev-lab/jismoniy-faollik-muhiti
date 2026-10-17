@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { UserRole, DailyEntry, WeeklyGoal, Card, CourseTopic, ObservationCard } from './types';
+import { UserRole, DailyEntry, WeeklyGoal, Card, CourseTopic, ObservationCard, AuthenticatedUser } from './types';
 import { useLanguage } from './context/LanguageContext';
 import { 
   mockCards, 
@@ -11,11 +11,13 @@ import {
   mockBadges, 
   mockChallenge, 
   mockAssessments, 
-  mockObservationCards 
+  mockObservationCards,
+  SUPERVISOR_CREDENTIALS
 } from './data/mockData';
 
 import { Navbar } from './components/Navbar';
 import { GlossaryModal } from './components/GlossaryModal';
+import { AuthModal } from './components/AuthModal';
 import { LandingPage } from './components/LandingPage';
 import { DailyDiary } from './components/DailyDiary';
 import { WeeklyProfile } from './components/WeeklyProfile';
@@ -37,8 +39,32 @@ export const App: React.FC = () => {
     return localStorage.getItem('rfm_theme') === 'dark';
   });
 
-  // User role state (RBAC)
-  const [currentRole, setCurrentRole] = useState<UserRole>('talaba');
+  // Authenticated user state (Talaba vs Nazoratchilar)
+  const [currentUser, setCurrentUser] = useState<AuthenticatedUser>(() => {
+    const saved = localStorage.getItem('rfm_auth_user');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.fio) return parsed;
+      } catch (e) {}
+    }
+    return {
+      id: 'usr_001',
+      role: 'talaba',
+      fio: 'Jasur Alimov',
+      guruh_id: '301-Pedagogika (Tajriba)',
+      kurs: 3,
+      muassasa: 'Toshkent Davlat Pedagogika Universiteti',
+      isLoggedIn: true
+    };
+  });
+
+  // User role state (RBAC) synced with authenticated user
+  const [currentRole, setCurrentRole] = useState<UserRole>(() => currentUser.role || 'talaba');
+
+  // Auth Modal state
+  const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [authInitialTab, setAuthInitialTab] = useState<'talaba' | 'nazoratchi'>('talaba');
 
   // Active tab state
   const [activeTab, setActiveTab] = useState<string>('landing');
@@ -119,11 +145,112 @@ export const App: React.FC = () => {
     localStorage.setItem('rfm_observations', JSON.stringify(observationCards));
   }, [observationCards]);
 
+  // Authentication Handlers
+  const handleLoginStudent = (fullName: string, group: string) => {
+    const user: AuthenticatedUser = {
+      id: `usr_student_${Date.now()}`,
+      role: 'talaba',
+      fio: fullName,
+      guruh_id: group,
+      kurs: 3,
+      muassasa: 'Toshkent Davlat Pedagogika Universiteti',
+      isLoggedIn: true,
+      loginTime: new Date().toISOString()
+    };
+    setCurrentUser(user);
+    setCurrentRole('talaba');
+    localStorage.setItem('rfm_auth_user', JSON.stringify(user));
+    setActiveTab('diary');
+  };
+
+  const handleLoginSupervisor = (login: string, pass: string): { success: boolean; error?: string } => {
+    const trimmedLogin = login.toLowerCase();
+    const trimmedPass = pass.trim();
+
+    const match = SUPERVISOR_CREDENTIALS.find(c => 
+      (c.login.toLowerCase() === trimmedLogin || c.altLogin.toLowerCase() === trimmedLogin) &&
+      (c.password === trimmedPass || c.altPassword === trimmedPass)
+    );
+
+    if (match) {
+      const user: AuthenticatedUser = {
+        id: match.user.id,
+        role: match.role,
+        fio: match.user.fio,
+        muassasa: match.user.muassasa,
+        yonalish: match.user.yonalish,
+        kurs: match.user.kurs,
+        guruh_id: match.user.guruh_id,
+        isLoggedIn: true,
+        loginTime: new Date().toISOString()
+      };
+      setCurrentUser(user);
+      setCurrentRole(match.role);
+      localStorage.setItem('rfm_auth_user', JSON.stringify(user));
+
+      if (match.role === 'oqituvchi') setActiveTab('teacher');
+      else if (match.role === 'tyutor') setActiveTab('tutor');
+      else setActiveTab('department');
+      return { success: true };
+    }
+
+    return { 
+      success: false, 
+      error: t('authInvalidCreds')
+    };
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('rfm_auth_user');
+    const guestUser: AuthenticatedUser = {
+      id: 'guest',
+      role: 'talaba',
+      fio: 'Mehmon talaba',
+      isLoggedIn: false
+    };
+    setCurrentUser(guestUser);
+    setCurrentRole('talaba');
+    setActiveTab('landing');
+    setAuthInitialTab('talaba');
+    setAuthModalOpen(true);
+  };
+
+  const handleOpenAuth = (initialTab: 'talaba' | 'nazoratchi' = 'talaba') => {
+    setAuthInitialTab(initialTab);
+    setAuthModalOpen(true);
+  };
+
   // Handler for Demo start from Landing
   const handleStartDemo = (role: UserRole, targetTab: string) => {
-    setCurrentRole(role);
-    setActiveTab(targetTab);
+    if (role === 'talaba') {
+      if (!currentUser.isLoggedIn) {
+        setAuthInitialTab('talaba');
+        setAuthModalOpen(true);
+      } else {
+        setCurrentRole('talaba');
+        setActiveTab('diary');
+      }
+    } else {
+      // Supervisor requested: require credentials
+      if (!currentUser.isLoggedIn || currentUser.role === 'talaba') {
+        setAuthInitialTab('nazoratchi');
+        setAuthModalOpen(true);
+      } else {
+        setCurrentRole(role);
+        setActiveTab(targetTab);
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Handler for adding card to catalog (for teachers/supervisors)
+  const handleAddCard = (newCard: Omit<Card, 'id' | 'isFavorite'>) => {
+    const cardWithId: Card = {
+      ...newCard,
+      id: `card_${Date.now()}`,
+      isFavorite: false
+    };
+    setCards(prev => [cardWithId, ...prev]);
   };
 
   // Handler for adding daily diary entry
@@ -180,6 +307,9 @@ export const App: React.FC = () => {
       {/* Navigation Header */}
       <Navbar
         currentRole={currentRole}
+        currentUser={currentUser}
+        onOpenAuth={handleOpenAuth}
+        onLogout={handleLogout}
         onRoleChange={(role) => {
           setCurrentRole(role);
           if (role === 'oqituvchi') setActiveTab('teacher');
@@ -211,6 +341,7 @@ export const App: React.FC = () => {
           <DailyDiary
             entries={entries}
             onAddEntry={handleAddEntry}
+            currentUser={currentUser}
           />
         )}
 
@@ -234,6 +365,7 @@ export const App: React.FC = () => {
             cards={cards}
             onToggleFavorite={handleToggleFavorite}
             onAddToLesson={() => {}}
+            onAddCard={handleAddCard}
             userRole={currentRole}
           />
         )}
@@ -274,12 +406,14 @@ export const App: React.FC = () => {
             cards={cards}
             observationCards={observationCards}
             onAddObservation={handleAddObservation}
+            currentUser={currentUser}
           />
         )}
 
         {(activeTab === 'tutor' || activeTab === 'department') && (
           <TutorDepartmentDashboard
             userRole={currentRole === 'kafedra' ? 'kafedra' : 'tyutor'}
+            currentUser={currentUser}
           />
         )}
 
@@ -313,6 +447,17 @@ export const App: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        currentUser={currentUser}
+        onLoginStudent={handleLoginStudent}
+        onLoginSupervisor={handleLoginSupervisor}
+        onLogout={handleLogout}
+        initialTab={authInitialTab}
+      />
 
       {/* Glossary Modal */}
       <GlossaryModal
