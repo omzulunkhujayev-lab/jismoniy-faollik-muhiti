@@ -67,6 +67,10 @@ export const translations = {
     fieldReflection: "Kunlik refleksiya (1–2 jumla, ixtiyoriy)",
     btnSaveDiary: "Kundalikka saqlash (Yopiq halqaga kiritish)",
     historyTitle: "Oxirgi kiritilgan yozuvlar tarixi",
+    btnAutoSync: "📱 Qurilmadan avtomatik yuklash (Sensor / APK / iOS)",
+    autoSleepNote: "Kechasi 20:00 dan keyingi ekran nofaolligi orqali hisoblangan",
+    autoScreenNote: "Kunlik ekrandan foydalanish vaqti (Screen-on vaqti)",
+    autoDaytimeSedentary: "Kunduzi harakatsiz / nofaol o'tirish vaqti",
 
     // Weekly Profile
     weeklyTitle: "Haftalik Faollik Profili",
@@ -251,6 +255,10 @@ export const translations = {
     fieldReflection: "Дневная рефлексия (1–2 предложения, опционально)",
     btnSaveDiary: "Сохранить в дневник (Внести в замкнутый цикл)",
     historyTitle: "История последних записей",
+    btnAutoSync: "📱 Авто-загрузка с устройства (Датчики / APK / iOS)",
+    autoSleepNote: "Рассчитано по неактивности экрана после 20:00 вечера",
+    autoScreenNote: "Дневное время использования экрана (Screen-on)",
+    autoDaytimeSedentary: "Дневное малоподвижное / сидячее время",
 
     // Weekly Profile
     weeklyTitle: "Недельный Профиль Активности",
@@ -435,6 +443,10 @@ export const translations = {
     fieldReflection: "Daily Reflection (1–2 sentences, optional)",
     btnSaveDiary: "Save to Diary (Enter Closed Loop)",
     historyTitle: "Recent Entry History",
+    btnAutoSync: "📱 Auto-Sync from Device (Sensors / APK / iOS)",
+    autoSleepNote: "Calculated via screen inactivity after 20:00 PM",
+    autoScreenNote: "Daily screen usage time (Screen-on time)",
+    autoDaytimeSedentary: "Daytime sedentary / inactive time",
 
     // Weekly Profile
     weeklyTitle: "Weekly Activity Profile",

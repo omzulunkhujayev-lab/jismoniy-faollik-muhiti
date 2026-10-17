@@ -28,6 +28,7 @@ import { GamificationModule } from './components/GamificationModule';
 import { TeacherDashboard } from './components/TeacherDashboard';
 import { TutorDepartmentDashboard } from './components/TutorDepartmentDashboard';
 import { Wifi, WifiOff } from 'lucide-react';
+import { initScreenTimeTracker } from './services/sensorService';
 
 export const App: React.FC = () => {
   const { t, lang } = useLanguage();
@@ -83,6 +84,11 @@ export const App: React.FC = () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
     };
+  }, []);
+
+  // Initialize screen time and night inactivity tracking
+  useEffect(() => {
+    initScreenTimeTracker();
   }, []);
 
   // Sync dark mode class with DOM

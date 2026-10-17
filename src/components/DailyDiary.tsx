@@ -13,8 +13,16 @@ import {
   Minus, 
   Save, 
   Sparkles,
-  AlertTriangle
+  AlertTriangle,
+  RefreshCw,
+  Settings2
 } from 'lucide-react';
+import { 
+  fetchDeviceTelemetry, 
+  calculateSleepFromCustomTimes, 
+  calculateSleepDuration, 
+  getTodayScreenTime 
+} from '../services/sensorService';
 
 interface DailyDiaryProps {
   entries: DailyEntry[];
@@ -35,6 +43,52 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
   const [kayfiyatBall, setKayfiyatBall] = useState<number>(4);
   const [refleksiyaMatn, setRefleksiyaMatn] = useState<string>('');
   const [savedSuccess, setSavedSuccess] = useState<boolean>(false);
+
+  // Auto-sync & Sleep Calculation states
+  const [isSyncing, setIsSyncing] = useState<boolean>(false);
+  const [syncNotice, setSyncNotice] = useState<string | null>(null);
+  const [sleepBedTime, setSleepBedTime] = useState<string>("23:15");
+  const [sleepWakeTime, setSleepWakeTime] = useState<string>("06:45");
+  const [showSleepAdjust, setShowSleepAdjust] = useState<boolean>(false);
+  const [screenTimeDetailStr, setScreenTimeDetailStr] = useState<string>("4 soat 0 daqiqa");
+
+  const handleAutoSync = async () => {
+    setIsSyncing(true);
+    try {
+      const data = await fetchDeviceTelemetry();
+      setQadam(data.qadam);
+      setFaolDaqiqa(data.faolDaqiqa);
+      setEngUzunOtirish(data.engUzunOtirish);
+      setUyquSoat(data.uyquSoat);
+      setEkranSoat(data.ekranSoat);
+      setPauzaSoni(data.pauzaSoni);
+      setSleepBedTime(data.sleepDetails.lockTime);
+      setSleepWakeTime(data.sleepDetails.unlockTime);
+      setScreenTimeDetailStr(data.screenTimeDetails.formatted);
+
+      const sourceLabel = data.source === 'native_sensor' 
+        ? 'Apple Health / Health Connect APK' 
+        : 'HTML5 Pedometer & Sensor';
+
+      setSyncNotice(
+        lang === 'ru'
+          ? `Синхронизировано (${sourceLabel}, ${data.syncTimestamp})!`
+          : lang === 'en'
+          ? `Synchronized (${sourceLabel}, ${data.syncTimestamp})!`
+          : `Sensorlardan yuklandi (${sourceLabel}, ${data.syncTimestamp})!`
+      );
+      setTimeout(() => setSyncNotice(null), 4000);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
+  const handleCustomSleepRecalc = (bed: string, wake: string) => {
+    setSleepBedTime(bed);
+    setSleepWakeTime(wake);
+    const calculated = calculateSleepFromCustomTimes(bed, wake);
+    setUyquSoat(calculated);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,6 +162,39 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
       {/* Main Entry Form */}
       <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-100 dark:border-slate-700/80 space-y-8">
         
+        {/* Device Sensors & Native Auto-Sync Banner */}
+        <div className="p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-xl border-2 border-emerald-400/40">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 font-extrabold text-sm sm:text-base">
+              <Smartphone className="w-5 h-5 text-emerald-200 animate-pulse" />
+              <span>{t('btnAutoSync')}</span>
+            </div>
+            <p className="text-xs text-emerald-100 max-w-xl font-medium">
+              {lang === 'ru' 
+                ? 'Авто-расчет: шаги и активность (акселерометр), сон (неактивность после 20:00), экранное время' 
+                : lang === 'en' 
+                ? 'Automatic telemetry: steps & activity (pedometer), sleep (post-20:00 screen lock), screen-on duration' 
+                : 'Sensorlar telemetriyasi: qadam va faollik (akselerometr/Health), uyqu (20:00 dan keyingi ekran nofaolligi), ekran vaqti'}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleAutoSync}
+            disabled={isSyncing}
+            className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white text-emerald-900 font-extrabold text-xs sm:text-sm hover:bg-emerald-50 active:scale-95 transition shadow-lg flex items-center justify-center gap-2 shrink-0 cursor-pointer"
+          >
+            <RefreshCw className={`w-4 h-4 text-emerald-700 ${isSyncing ? 'animate-spin' : ''}`} />
+            <span>{isSyncing ? (lang === 'ru' ? 'Синхронизация...' : lang === 'en' ? 'Syncing...' : 'Yuklanmoqda...') : (lang === 'ru' ? 'Синхронизировать' : lang === 'en' ? 'Sync Telemetry' : 'Sinxronlash')}</span>
+          </button>
+        </div>
+
+        {syncNotice && (
+          <div className="p-4 rounded-2xl bg-cyan-600 text-white font-extrabold text-xs sm:text-sm flex items-center gap-2.5 shadow-lg animate-in fade-in">
+            <CheckCircle2 className="w-5 h-5 shrink-0" />
+            <span>{syncNotice}</span>
+          </div>
+        )}
+
         {/* Grid for Sliders & Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -219,12 +306,17 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
             </div>
           </div>
 
-          {/* 3. Eng uzun uzluksiz o'tirish */}
+          {/* 3. Eng uzun uzluksiz o'tirish - Kunduzi harakatsiz nofaol vaqt */}
           <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <AlertTriangle className={`w-4 h-4 ${engUzunOtirish > 60 ? 'text-rose-500' : 'text-emerald-500'}`} /> {t('fieldMaxSitting')}
-              </span>
+              <div>
+                <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                  <AlertTriangle className={`w-4 h-4 ${engUzunOtirish > 60 ? 'text-rose-500' : 'text-emerald-500'}`} /> {t('fieldMaxSitting')}
+                </span>
+                <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 block mt-0.5">
+                  {t('autoDaytimeSedentary')} (08:00–20:00)
+                </span>
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -305,12 +397,17 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
             </div>
           </div>
 
-          {/* 5. Uyqu davomiyligi */}
+          {/* 5. Uyqu davomiyligi - Kechasi 20:00 dan keyingi ekran nofaolligi orqali hisoblangan */}
           <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <Moon className="w-4 h-4 text-indigo-500" /> {t('fieldSleep')}
-              </span>
+              <div>
+                <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                  <Moon className="w-4 h-4 text-indigo-500" /> {t('fieldSleep')}
+                </span>
+                <span className="text-[11px] font-semibold text-indigo-600 dark:text-indigo-400 block mt-0.5">
+                  🌙 {lang === 'ru' ? 'Неактивность экрана после 20:00' : lang === 'en' ? 'Screen inactivity after 20:00' : '20:00 dan keyingi ekran nofaolligi'}
+                </span>
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -336,17 +433,70 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               onChange={(e) => setUyquSoat(Number(e.target.value))}
               className="w-full accent-indigo-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
             />
-            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-              {uyquSoat >= 7 && uyquSoat <= 9 ? '🟢 7–9 soat (Optimal tiklanish me\'yori)' : '⚠️ Me\'yoriy oraliq: 7–9 soat'}
+
+            {/* Sleep Calculation Details Box */}
+            <div className="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 border border-indigo-200 dark:border-indigo-800/60 space-y-2">
+              <div className="flex items-center justify-between text-xs font-bold text-indigo-900 dark:text-indigo-200">
+                <span>{t('autoSleepNote')}</span>
+                <button
+                  type="button"
+                  onClick={() => setShowSleepAdjust(!showSleepAdjust)}
+                  className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 font-extrabold"
+                >
+                  <Settings2 className="w-3 h-3" />
+                  <span>{showSleepAdjust ? (lang === 'ru' ? 'Скрыть' : lang === 'en' ? 'Close' : 'Yopish') : (lang === 'ru' ? 'Скорректировать' : lang === 'en' ? 'Adjust times' : 'Vaqtlarni tuzatish')}</span>
+                </button>
+              </div>
+
+              <div className="text-xs text-slate-700 dark:text-slate-200 font-semibold flex items-center justify-between">
+                <span>{lang === 'ru' ? 'Вечерняя блокировка:' : lang === 'en' ? 'Evening lock:' : "Kechki o'chish:"} <strong>{sleepBedTime}</strong></span>
+                <span>➡️</span>
+                <span>{lang === 'ru' ? 'Утреннее включение:' : lang === 'en' ? 'Morning unlock:' : "Ertalabki yoqilish:"} <strong>{sleepWakeTime}</strong></span>
+                <span className="px-2 py-0.5 rounded-md bg-indigo-200 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 font-extrabold">
+                  {uyquSoat} {lang === 'ru' ? 'ч' : lang === 'en' ? 'hrs' : 'soat'}
+                </span>
+              </div>
+
+              {showSleepAdjust && (
+                <div className="pt-2.5 border-t border-indigo-200 dark:border-indigo-800/60 grid grid-cols-2 gap-2.5 text-xs">
+                  <div>
+                    <label className="block text-[10px] font-extrabold text-slate-700 dark:text-slate-300 mb-1">
+                      {lang === 'ru' ? 'Время вечерней блокировки:' : lang === 'en' ? 'Evening lock time:' : "Kechki o'chish vaqti:"}
+                    </label>
+                    <input
+                      type="time"
+                      value={sleepBedTime}
+                      onChange={(e) => handleCustomSleepRecalc(e.target.value, sleepWakeTime)}
+                      className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border-2 border-indigo-300 dark:border-indigo-700 font-extrabold text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[10px] font-extrabold text-slate-700 dark:text-slate-300 mb-1">
+                      {lang === 'ru' ? 'Время утреннего включения:' : lang === 'en' ? 'Morning unlock time:' : "Ertalabki yoqilish vaqti:"}
+                    </label>
+                    <input
+                      type="time"
+                      value={sleepWakeTime}
+                      onChange={(e) => handleCustomSleepRecalc(sleepBedTime, e.target.value)}
+                      className="w-full p-2 rounded-xl bg-white dark:bg-slate-800 border-2 border-indigo-300 dark:border-indigo-700 font-extrabold text-slate-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* 6. Ekran vaqti */}
+          {/* 6. Ekran vaqti - Kunlik ekrandan foydalangan vaqt */}
           <div className="p-5 rounded-3xl bg-slate-50 dark:bg-slate-900/70 border-2 border-slate-200/80 dark:border-slate-800 space-y-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <Smartphone className="w-4 h-4 text-purple-500" /> {t('fieldScreen')}
-              </span>
+              <div>
+                <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                  <Smartphone className="w-4 h-4 text-purple-500" /> {t('fieldScreen')}
+                </span>
+                <span className="text-[11px] font-semibold text-purple-600 dark:text-purple-400 block mt-0.5">
+                  📱 {lang === 'ru' ? 'Дневное использование экрана' : lang === 'en' ? 'Daily screen-on usage time' : 'Kunlik ekrandan foydalanilgan vaqt'}
+                </span>
+              </div>
               <div className="flex items-center gap-2">
                 <input
                   type="number"
@@ -372,8 +522,16 @@ export const DailyDiary: React.FC<DailyDiaryProps> = ({ entries, onAddEntry }) =
               onChange={(e) => setEkranSoat(Number(e.target.value))}
               className="w-full accent-purple-600 cursor-pointer h-2 bg-slate-200 dark:bg-slate-700 rounded-lg"
             />
-            <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
-              {ekranSoat <= 4 ? '🟢 O\'rtacha me\'yor' : '⚠️ 4 soatdan ortiq ekran yuklamasi'}
+
+            {/* Screen Time Auto Breakdown */}
+            <div className="p-3.5 rounded-2xl bg-purple-50 dark:bg-purple-950/60 border border-purple-200 dark:border-purple-800/60 space-y-1">
+              <div className="text-xs font-bold text-purple-900 dark:text-purple-200 flex items-center gap-1.5">
+                <Smartphone className="w-3.5 h-3.5 text-purple-500" />
+                <span>{t('autoScreenNote')}</span>
+              </div>
+              <div className="text-xs text-slate-700 dark:text-slate-200 font-semibold">
+                📱 {lang === 'ru' ? 'Активное время включенного экрана (Screen-on):' : lang === 'en' ? 'Active screen-on time:' : 'Ekranning faol yoqiq turgan vaqti (Screen-on):'} <strong>{screenTimeDetailStr}</strong>
+              </div>
             </div>
           </div>
 
