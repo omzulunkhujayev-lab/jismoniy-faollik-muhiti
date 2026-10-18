@@ -31,6 +31,7 @@ import { GamificationModule } from './components/GamificationModule';
 import { TeacherDashboard } from './components/TeacherDashboard';
 import { TutorDepartmentDashboard } from './components/TutorDepartmentDashboard';
 import { AdminSupervisorManagement } from './components/AdminSupervisorManagement';
+import { MotionVideoPlayer } from './components/MotionVideoPlayer';
 import { Wifi, WifiOff } from 'lucide-react';
 import { initScreenTimeTracker } from './services/sensorService';
 
@@ -505,6 +506,12 @@ export const App: React.FC = () => {
           />
         )}
 
+        {activeTab === 'motion_video' && (
+          <MotionVideoPlayer
+            onBack={() => setActiveTab('landing')}
+            onNavigateTab={(tab) => setActiveTab(tab)}
+          />
+        )}
       </main>
 
       {/* Footer */}

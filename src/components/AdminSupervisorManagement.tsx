@@ -20,7 +20,8 @@ import {
   BarChart3, 
   Sparkles,
   X,
-  ExternalLink
+  ExternalLink,
+  Film
 } from 'lucide-react';
 
 interface AdminSupervisorManagementProps {
@@ -201,7 +202,8 @@ export const AdminSupervisorManagement: React.FC<AdminSupervisorManagementProps>
               { id: 'department', label: 'Kafedra Statistikasi', icon: BarChart3, color: 'text-cyan-300' },
               { id: 'cards', label: 'Kartochkalar Banki', icon: Sparkles, color: 'text-amber-300' },
               { id: 'lms', label: 'LMS Kurs Moduli', icon: GraduationCap, color: 'text-teal-300' },
-              { id: 'diary', label: 'Talaba Faollik Kundaligi', icon: Users, color: 'text-rose-300' }
+              { id: 'diary', label: 'Talaba Faollik Kundaligi', icon: Users, color: 'text-rose-300' },
+              { id: 'motion_video', label: '🎬 4K Motion Video Studio', icon: Film, color: 'text-yellow-400' }
             ].map(item => {
               const Icon = item.icon;
               return (
