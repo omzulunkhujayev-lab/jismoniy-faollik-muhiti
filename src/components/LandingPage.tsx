@@ -13,8 +13,7 @@ import {
   Brain, 
   Heart,
   Users,
-  GraduationCap,
-  Film
+  GraduationCap
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -89,14 +88,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartDemo, onOpenGlo
                 >
                   <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                   <span>{t('btnTeacherPanel')}</span>
-                </button>
-
-                <button
-                  onClick={() => onStartDemo('talaba', 'motion_video')}
-                  className="px-5 py-3.5 rounded-xl bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-bold text-sm transition shadow-lg shadow-indigo-600/30 flex items-center gap-2 group border border-purple-400/30"
-                >
-                  <Film className="w-4 h-4 text-amber-300 animate-pulse" />
-                  <span>{lang === 'ru' ? '🎬 4K Моушн-Видео Презентация' : lang === 'en' ? '🎬 4K Motion-Video Presentation' : '🎬 4K Motion-Video Prezentatsiya'}</span>
                 </button>
               </div>
 

@@ -28,8 +28,7 @@ import {
   LogOut,
   Lock,
   User as UserIcon,
-  ChevronDown,
-  Film
+  ChevronDown
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -86,7 +85,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const getTabs = () => {
     const commonTabs = [
       { id: 'landing', label: t('tabHome'), icon: Home },
-      { id: 'motion_video', label: lang === 'ru' ? '🎬 Моушн Видео' : lang === 'en' ? '🎬 Motion Video' : '🎬 Motion Video', icon: Film },
     ];
 
     if (currentRole === 'admin') {
